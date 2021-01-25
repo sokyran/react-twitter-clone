@@ -1,0 +1,78 @@
+@import '../../utils/globals.scss';
+
+.text-input {
+  display: grid;
+  width: 100%;
+  border: 1px solid $border-color;
+  padding: 10px;
+  grid-template-columns: 50px 1fr;
+
+  font-family: $font-family;
+
+  &-avatar {
+    margin-top: 5px;
+    grid-template-columns: 1 / span 1;
+  }
+
+  &-textfield {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0 10px;
+
+    cursor: text;
+
+    span {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      resize: none;
+      min-height: 60px;
+      line-height: 20px;
+
+      background: none;
+      outline: none;
+      border: none;
+
+      padding: 10px;
+
+      font-size: 1.2rem;
+
+      resize: none;
+
+      border-radius: 10px;
+      border: 1px solid #0077ff5e;
+      // box-shadow: 0 6px 20px #0076ff3b;
+
+      &:empty::before {
+        content: 'What are you thoughts?..';
+        color: gray;
+      }
+    }
+
+    button {
+      margin-left: auto;
+
+      margin-top: 10px;
+
+      height: 35px;
+      width: 80px;
+      border-radius: 50px;
+      color: #000;
+      font-weight: bold;
+      border: none;
+
+      outline: none;
+
+      cursor: pointer;
+
+      transition: background-color 0.5s ease;
+
+      &:hover {
+        color: #fff;
+        background: #0076ffe6;
+        box-shadow: 0 6px 20px #0076ff3b;
+      }
+    }
+  }
+}

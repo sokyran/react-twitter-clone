@@ -1,0 +1,61 @@
+@import '../../utils/globals.scss';
+
+.login-nav {
+  position: fixed;
+  bottom: 0px;
+
+  height: 50px;
+  width: 100%;
+  background: $main-color;
+  box-shadow: rgba(54, 147, 240, 0.233) 0px 0px 15px,
+    rgba(99, 172, 245, 0.15) 0px 0px 3px 1px;
+  &-content {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+    grid-template-rows: 50px;
+
+    font-family: $font-family;
+
+    p {
+      align-self: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-left: 10px;
+    }
+
+    button {
+      font-weight: 700;
+      height: 35px;
+      width: 100px;
+      align-self: center;
+
+      border-radius: 50px;
+      outline: none;
+
+      cursor: pointer;
+
+      transition: background-color 0.2s ease-in, color 0.1s ease;
+    }
+  }
+
+  &-log {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+
+    &:hover {
+      background: #2df1ff48;
+    }
+  }
+
+  &-sign {
+    color: $main-color;
+    border: none;
+
+    &:hover {
+      color: #2d3bff;
+      background: #b2bae4;
+    }
+  }
+}

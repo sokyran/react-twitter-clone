@@ -1,0 +1,101 @@
+@import '../../utils/globals.scss';
+
+.tweet {
+  width: 100%;
+  border: 1px solid $border-color;
+  margin: 0 auto;
+  padding: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  font-weight: 400;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+
+  &:hover {
+    background-color: rgba(67, 140, 235, 0.04);
+  }
+
+  &-avatar {
+    width: 50px;
+    border-radius: 50%;
+    grid-column: 1/-1;
+  }
+
+  &-image {
+    max-width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  &-user-info {
+    display: flex;
+
+    *:not(:last-of-type) {
+      margin-right: 5px;
+    }
+  }
+
+  &-author {
+    font-weight: bold;
+  }
+
+  &-usertag {
+    &::after {
+      content: '·';
+      margin-left: 5px;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+
+    button {
+      color: white;
+      background: none;
+      outline: none;
+      border: none;
+      height: 45px;
+      width: 45px;
+      margin-right: 30px;
+      border-radius: 40px;
+      transition: all 0.2s ease-in-out;
+
+      &::after {
+        content: attr(data-count);
+
+        font-family: $font-family;
+        font-size: 1rem;
+        position: absolute;
+        right: -19px;
+        top: 20%;
+      }
+    }
+
+    &-like {
+      position: relative;
+
+      &:hover {
+        background-color: rgba(235, 67, 89, 0.13);
+        color: #fa4059;
+      }
+    }
+
+    &-comment {
+      position: relative;
+
+      &:hover {
+        background-color: rgba(67, 140, 235, 0.13);
+        color: $main-color;
+      }
+    }
+
+    &-comment i {
+      position: relative;
+      left: 1px;
+    }
+  }
+}
