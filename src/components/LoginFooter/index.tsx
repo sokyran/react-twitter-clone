@@ -1,8 +1,8 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import './login-navbar-styles.scss'
+import './login-footer-styles.scss'
 
-export const LoginNavbar = () => {
+export const LoginFooter = () => {
   let history = useHistory()
 
   return (
