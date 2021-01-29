@@ -3,44 +3,96 @@ import { useHistory } from 'react-router-dom'
 import './login-page-styles.scss'
 
 interface Props {
-  handleLogin: (username: string, password: string) => void
+  handleLogin: (usertag: string, password: string) => void
+  handleSignUp: (
+    usertag: string,
+    username: string,
+    password: string,
+    avatar: string | null
+  ) => void
+  isSigningUp: boolean
 }
 
-export const LoginPage = ({ handleLogin }: Props) => {
-  const [username, setUsername] = useState('')
+export const LoginPage = ({
+  handleLogin,
+  handleSignUp,
+  isSigningUp,
+}: Props) => {
+  const [usertag, setUsertag] = useState('')
   const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [repeatPass, setRepeatPass] = useState('')
+
+  const [error, setError] = useState('')
   const history = useHistory()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    handleLogin(username, password)
-    setUsername('')
+    if (!isSigningUp) {
+      handleLogin(usertag, password)
+    } else if (isSigningUp) {
+      if (password !== repeatPass) {
+        setError('Passwords do not match.')
+        setPassword('')
+        setRepeatPass('')
+        return
+      } else {
+        handleSignUp(username, password, usertag, null)
+        setUsername('')
+        setRepeatPass('')
+      }
+    }
+    setUsertag('')
     setPassword('')
     history.push('/')
   }
 
   return (
     <div className="login-page container">
-      <p>Welcome!</p>
+      {isSigningUp ? <p>Enter your credentials to sign up</p> : <p>Welcome!</p>}
+      {error ? (
+        <div className="login-page-error">
+          <p>{error}</p>
+        </div>
+      ) : null}
       <form onSubmit={handleSubmit}>
         <div className="login-page-field">
           <input
             onChange={(e: React.FormEvent<HTMLInputElement>) => {
-              setUsername(e.currentTarget.value)
+              setUsertag(e.currentTarget.value)
             }}
             className={
-              'login-page-input' + (username.length > 0 ? ' focused' : '')
+              'login-page-input' + (usertag.length > 0 ? ' focused' : '')
             }
             type="text"
-            id="username"
-            value={username}
+            id="usertag"
+            value={usertag}
           />
-          <label htmlFor="username">Username</label>
+          <label htmlFor="usertag">Usertag</label>
         </div>
+        {isSigningUp ? (
+          <>
+            <div className="login-page-field">
+              <input
+                onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                  setUsername(e.currentTarget.value)
+                }}
+                className={
+                  'login-page-input' + (username.length > 0 ? ' focused' : '')
+                }
+                type="text"
+                id="username"
+                value={username}
+              />
+              <label htmlFor="username">Username</label>
+            </div>
+          </>
+        ) : null}
         <div className="login-page-field">
           <input
             onChange={(e: React.FormEvent<HTMLInputElement>) => {
               setPassword(e.currentTarget.value)
+              setError('')
             }}
             className={
               'login-page-input' + (password.length > 0 ? ' focused' : '')
@@ -51,7 +103,30 @@ export const LoginPage = ({ handleLogin }: Props) => {
           />
           <label htmlFor="password">Password</label>
         </div>
-        <input className="login-page-submit" type="submit" value="Log in" />
+        {isSigningUp ? (
+          <>
+            <div className="login-page-field">
+              <input
+                onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                  setRepeatPass(e.currentTarget.value)
+                  setError('')
+                }}
+                className={
+                  'login-page-input' + (repeatPass.length > 0 ? ' focused' : '')
+                }
+                type="password"
+                id="repeat-pass"
+                value={repeatPass}
+              />
+              <label htmlFor="repeat-pass">Repeat Password</label>
+            </div>
+          </>
+        ) : null}
+        <input
+          className="login-page-submit"
+          type="submit"
+          value={isSigningUp ? 'Sign Up' : 'Log In'}
+        />
       </form>
     </div>
   )

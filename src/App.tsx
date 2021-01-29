@@ -1,78 +1,110 @@
 import React, { useEffect, useState } from 'react'
-import { LoginNavbar } from './components/LoginNavbar'
-import { Tweet } from './components/Tweet'
+import { LoginFooter } from './components/LoginFooter'
 import { TweetInput } from './components/TweetInput'
 import { ITweet, IUser } from './utils/types'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { LoginPage } from './components/LoginPage'
-import { gql, useMutation } from '@apollo/client'
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import Loader from 'react-loader-spinner'
+import { useMutation, useQuery } from '@apollo/client'
+import { ClassicSpinner } from 'react-spinners-kit'
+import { Navbar } from './components/Navbar'
+import { GET_TWEETS, SIGN_IN, SIGN_UP } from './utils/queries'
+import { Tweet } from './components/Tweet'
 
 function App() {
   const [token, setToken] = useState<string | null>(null)
+  const [user, setUser] = useState<IUser | null>(null)
+  const [tweets, setTweets] = useState<ITweet[]>([])
 
-  const authenticateUser = gql`
-    mutation signIn($username: String!, $password: String!) {
-      signIn(userInfoInput: { username: $username, password: $password }) {
-        access_token
-      }
-    }
-  `
-  const [authenticate, result] = useMutation(authenticateUser)
+  const [authenticateUser, loginResult] = useMutation(SIGN_IN)
+  const [signUpUser] = useMutation(SIGN_UP)
+  const {
+    loading: tweetsLoading,
+    error: tweetsError,
+    data: tweetsQuery,
+  } = useQuery(GET_TWEETS, { pollInterval: 5000 })
 
   useEffect(() => {
-    if (result.data) {
-      console.log(result.data)
-      const token = result.data.signIn.access_token
-      setToken(token)
+    if (loginResult.data) {
+      const userToken = loginResult.data.signIn.access_token
+      const { avatar, username, usertag } = loginResult.data.signIn
+      setUser({ avatar, username, usertag })
+      setToken(userToken)
+      localStorage.setItem('token', userToken)
+      localStorage.setItem('user', JSON.stringify(user))
     }
-  }, [result.data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginResult.data])
 
-  const handleLogin = (username: string, password: string) => {
-    authenticate({ variables: { username, password } })
+  useEffect(() => {
+    const storageToken = localStorage.getItem('token')
+    const storageUser = localStorage.getItem('user')
+    if (storageToken && storageUser) {
+      setToken(storageToken)
+      setUser(JSON.parse(storageUser))
+    }
+  }, [])
+
+  const handleLogin = (usertag: string, password: string) => {
+    authenticateUser({ variables: { usertag, password } })
   }
 
-  const user: IUser = {
-    username: 'Avgust',
-    usertag: 'avgust',
-    avatar: 'https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg',
-  }
-
-  const tweet: ITweet = {
-    id: 1,
-    text: `>пишешь что-то спорное и резкое о политоте
-    >тебя выносит во внешний твиттер
-    >разномастные немедленно начинают Пелевина
-    >Виктора`,
-    date: 1231232,
-    user,
-    imageUrl:
-      'https://habrastorage.org/getpro/tmtm/megapost/cd2/bdd/6e8/cd2bdd6e8b3a9866ff7d5ebc0b4fc99a.png',
+  const handleSignUp = (
+    usertag: string,
+    username: string,
+    password: string,
+    avatar: string | null
+  ) => {
+    signUpUser({ variables: { usertag, username, password, avatar } })
   }
 
   return (
     <Router>
-      {result.loading ? (
+      <Navbar user={user} />
+      {loginResult.loading ? (
         <div className="loader">
-          <Loader type="TailSpin" color="#00BFFF" height={160} width={160} />
+          <ClassicSpinner
+            size={150}
+            color="#00BFFF"
+            loading={loginResult.loading}
+          />
         </div>
       ) : (
-        <>
-          <Switch>
-            <Route path="/login">
-              <LoginPage handleLogin={handleLogin} />
-            </Route>
-            <Route path="/">
-              <div className="container">
-                <TweetInput />
-                <Tweet tweet={tweet} />
-                <Tweet tweet={tweet} />
-              </div>
-              {!token ? <LoginNavbar /> : null}
-            </Route>
-          </Switch>
-        </>
+        <Switch>
+          <Route path="/login">
+            <LoginPage
+              handleLogin={handleLogin}
+              handleSignUp={handleSignUp}
+              isSigningUp={false}
+            />
+          </Route>
+          <Route path="/signup">
+            <LoginPage
+              handleLogin={handleLogin}
+              handleSignUp={handleSignUp}
+              isSigningUp={true}
+            />
+          </Route>
+          <Route path="/">
+            <div className="container">
+              {user ? <TweetInput user={user} /> : null}
+              {!tweetsLoading &&
+              Object.values(tweetsQuery.tweets).length > 0 ? (
+                tweetsQuery.tweets.map((tweet: ITweet) => (
+                  <Tweet tweet={tweet} key={tweet.id} />
+                ))
+              ) : (
+                <div className="loader">
+                  <ClassicSpinner
+                    size={50}
+                    color="#00BFFF"
+                    loading={tweetsLoading}
+                  />
+                </div>
+              )}
+            </div>
+            {!token ? <LoginFooter /> : null}
+          </Route>
+        </Switch>
       )}
     </Router>
   )

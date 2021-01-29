@@ -80,5 +80,34 @@
     background: $main-color;
 
     cursor: pointer;
+
+    &:hover {
+      box-shadow: rgba(54, 147, 240, 0.233) 0px 0px 15px,
+        rgba(99, 172, 245, 0.15) 0px 0px 3px 1px;
+    }
+  }
+
+  &-error {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 80%;
+    max-width: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    font-size: 1.2rem;
+
+    height: 60px;
+    background: none;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid $border-color;
+    box-shadow: rgba(240, 54, 69, 0.233) 0px 0px 15px,
+      rgba(245, 99, 106, 0.15) 0px 0px 3px 1px;
+
+    p {
+      margin: 0 auto;
+    }
   }
 }

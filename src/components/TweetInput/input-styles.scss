@@ -4,61 +4,72 @@
   display: grid;
   width: 100%;
   border: 1px solid $border-color;
+  border-radius: 10px;
+  box-shadow: 0 1px 10px #0076ff3b;
+
   padding: 10px;
-  grid-template-columns: 50px 1fr;
+  margin: 15px 0;
 
   font-family: $font-family;
-
-  &-avatar {
-    margin-top: 5px;
-    grid-template-columns: 1 / span 1;
-  }
 
   &-textfield {
     display: flex;
     flex-direction: column;
-
-    margin: 0 10px;
-
     cursor: text;
 
-    span {
-      display: block;
+    &-resizable {
+      grid-column: 1 / -1;
+      color: #fff;
+
       width: 100%;
       overflow: hidden;
       resize: none;
       min-height: 60px;
+
       line-height: 20px;
 
       background: none;
       outline: none;
-      border: none;
 
       padding: 10px;
 
       font-size: 1.2rem;
-
-      resize: none;
+      font-family: $font-family;
 
       border-radius: 10px;
       border: 1px solid #0077ff5e;
-      // box-shadow: 0 6px 20px #0076ff3b;
 
       &:empty::before {
         content: 'What are you thoughts?..';
         color: gray;
       }
     }
+  }
 
-    button {
-      margin-left: auto;
+  &-tools {
+    width: 100%;
 
-      margin-top: 10px;
+    margin-top: 10px;
+
+    display: flex;
+    justify-content: space-between;
+
+    &-circle {
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+
+      align-self: center;
+    }
+
+    &-btn {
+      align-self: center;
 
       height: 35px;
-      width: 80px;
-      border-radius: 50px;
+      width: 100px;
+      border-radius: 10px;
       color: #000;
+      font-size: 1.1rem;
       font-weight: bold;
       border: none;
 
