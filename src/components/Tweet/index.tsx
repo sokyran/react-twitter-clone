@@ -11,11 +11,7 @@ export const Tweet = ({ tweet }: Props) => {
   return (
     <div className="tweet">
       <div className="tweet-avatar-replies-container">
-        <img
-          className="tweet-avatar"
-          src="https://www.meme-arsenal.com/memes/f829154b6247042d8821a19015eb2f7c.jpg"
-          alt="Profile"
-        />
+        <img className="tweet-avatar" src={tweet.user.avatar} alt="Profile" />
       </div>
       <div>
         <div className="tweet-user-info">

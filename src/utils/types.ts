@@ -10,4 +10,5 @@ export interface IUser {
   username: string
   usertag: string
   avatar: string
+  accessToken?: string
 }

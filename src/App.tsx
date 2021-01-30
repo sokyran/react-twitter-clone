@@ -1,46 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { LoginFooter } from './components/LoginFooter'
 import { TweetInput } from './components/TweetInput'
-import { ITweet, IUser } from './utils/types'
+import { IUser } from './utils/types'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { LoginPage } from './components/LoginPage'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { ClassicSpinner } from 'react-spinners-kit'
 import { Navbar } from './components/Navbar'
-import { GET_TWEETS, SIGN_IN, SIGN_UP } from './utils/queries'
-import { Tweet } from './components/Tweet'
+import { SIGN_IN, SIGN_UP } from './utils/queries'
+import { TweetContainer } from './containers/TweetContainer'
 
 function App() {
-  const [token, setToken] = useState<string | null>(null)
   const [user, setUser] = useState<IUser | null>(null)
-  const [tweets, setTweets] = useState<ITweet[]>([])
 
   const [authenticateUser, loginResult] = useMutation(SIGN_IN)
   const [signUpUser] = useMutation(SIGN_UP)
-  const {
-    loading: tweetsLoading,
-    error: tweetsError,
-    data: tweetsQuery,
-  } = useQuery(GET_TWEETS, { pollInterval: 5000 })
 
   useEffect(() => {
     if (loginResult.data) {
-      const userToken = loginResult.data.signIn.access_token
-      const { avatar, username, usertag } = loginResult.data.signIn
-      setUser({ avatar, username, usertag })
-      setToken(userToken)
-      localStorage.setItem('token', userToken)
-      localStorage.setItem('user', JSON.stringify(user))
+      const result = loginResult.data.signIn
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ ...result, expires: Date.now() + 3600000 })
+      )
+      setUser(result)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginResult.data])
 
   useEffect(() => {
-    const storageToken = localStorage.getItem('token')
     const storageUser = localStorage.getItem('user')
-    if (storageToken && storageUser) {
-      setToken(storageToken)
-      setUser(JSON.parse(storageUser))
+
+    if (storageUser) {
+      const parsedUser = JSON.parse(storageUser)
+      if (parsedUser.expires > Date.now()) {
+        setUser(parsedUser)
+      } else {
+        localStorage.removeItem('user')
+      }
     }
   }, [])
 
@@ -87,22 +84,9 @@ function App() {
           <Route path="/">
             <div className="container">
               {user ? <TweetInput user={user} /> : null}
-              {!tweetsLoading &&
-              Object.values(tweetsQuery.tweets).length > 0 ? (
-                tweetsQuery.tweets.map((tweet: ITweet) => (
-                  <Tweet tweet={tweet} key={tweet.id} />
-                ))
-              ) : (
-                <div className="loader">
-                  <ClassicSpinner
-                    size={50}
-                    color="#00BFFF"
-                    loading={tweetsLoading}
-                  />
-                </div>
-              )}
+              <TweetContainer />
             </div>
-            {!token ? <LoginFooter /> : null}
+            {!user ? <LoginFooter /> : null}
           </Route>
         </Switch>
       )}
