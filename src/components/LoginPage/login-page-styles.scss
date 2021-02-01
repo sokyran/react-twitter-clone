@@ -18,6 +18,7 @@
   &-field {
     position: relative;
     width: 100%;
+    padding-bottom: 20px;
   }
 
   &-input {
@@ -26,24 +27,38 @@
     height: 60px;
     background: none;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid $border-color;
     color: #fff;
     font-size: 1.2rem;
 
-    margin-bottom: 20px;
     padding-left: 5px;
+  }
+
+  .error-field {
+    border-color: #fc8181;
+
+    & ~ label {
+      color: #fc8181;
+    }
+  }
+
+  &-error {
+    padding-top: 5px;
+    padding-left: 10px;
+    color: #fc8181;
   }
 
   &-input ~ label {
     position: absolute;
     left: 2%;
-    top: 22%;
+    top: 18%;
     width: 100%;
     color: #aaa;
     transition: 0.3s;
     z-index: 2;
     letter-spacing: 0.5px;
+    cursor: text;
   }
 
   &-input:focus {
@@ -68,46 +83,29 @@
   &-submit {
     width: 100%;
     min-width: fit-content;
-    height: 40px;
-    border-radius: 50px;
+    height: 50px;
+    border-radius: 10px;
 
     font-family: $font-family;
     outline: none;
     border: none;
     font-weight: bold;
     font-size: 1.2rem;
-    color: #fff;
-    background: $main-color;
-
     cursor: pointer;
 
-    &:hover {
-      box-shadow: rgba(54, 147, 240, 0.233) 0px 0px 15px,
-        rgba(99, 172, 245, 0.15) 0px 0px 3px 1px;
+    &:disabled {
+      background: #004a79;
+      color: #dbdbdb;
     }
-  }
 
-  &-error {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 80%;
-    max-width: stretch;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    font-size: 1.2rem;
+    &:enabled {
+      background: $main-color;
+      color: #fff;
 
-    height: 60px;
-    background: none;
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid $border-color;
-    box-shadow: rgba(240, 54, 69, 0.233) 0px 0px 15px,
-      rgba(245, 99, 106, 0.15) 0px 0px 3px 1px;
-
-    p {
-      margin: 0 auto;
+      &:hover {
+        box-shadow: rgba(54, 147, 240, 0.233) 0px 0px 15px,
+          rgba(99, 172, 245, 0.15) 0px 0px 3px 1px;
+      }
     }
   }
 }

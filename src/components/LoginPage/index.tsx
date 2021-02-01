@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Formik, FormikErrors, useField } from 'formik'
+import React from 'react'
+// import { useHistory } from 'react-router-dom'
 import './login-page-styles.scss'
 
 interface Props {
@@ -13,121 +14,133 @@ interface Props {
   isSigningUp: boolean
 }
 
+interface FormProps {
+  usertag: string
+  username: string
+  password: string
+  repeatPass: string
+}
+
+interface TextInputProps {
+  id: string
+  name: string
+  label: string
+  type?: string
+}
+
+const MyTextInput = ({ id, name, label, type = 'text' }: TextInputProps) => {
+  const [field, { error, touched }] = useField({
+    name,
+    type,
+  })
+  return (
+    <div className={'login-page-field'}>
+      <input
+        id={id}
+        type={type}
+        {...field}
+        className={
+          'login-page-input' +
+          (field.value.length > 0 ? ' focused' : '') +
+          (touched && error ? ' error-field' : '')
+        }
+      />
+      <label htmlFor={id || name}>{label}</label>
+      {touched && error ? (
+        <div className="login-page-error">{error}</div>
+      ) : null}
+    </div>
+  )
+}
+
 export const LoginPage = ({
   handleLogin,
   handleSignUp,
   isSigningUp,
 }: Props) => {
-  const [usertag, setUsertag] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [repeatPass, setRepeatPass] = useState('')
+  const initialValues: FormProps = {
+    usertag: '',
+    username: '',
+    password: '',
+    repeatPass: '',
+  }
 
-  const [error, setError] = useState('')
-  const history = useHistory()
+  const validate = (values: FormProps) => {
+    const errors: FormikErrors<FormProps> = {}
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!isSigningUp) {
-      handleLogin(usertag, password)
-    } else if (isSigningUp) {
-      if (password !== repeatPass) {
-        setError('Passwords do not match.')
-        setPassword('')
-        setRepeatPass('')
-        return
-      } else {
-        handleSignUp(username, password, usertag, null)
-        setUsername('')
-        setRepeatPass('')
+    if (!values.usertag) {
+      errors.usertag = 'Required'
+    } else if (values.usertag.length < 4) {
+      errors.usertag = 'Must be 4 characters or more'
+    }
+
+    if (!values.password) {
+      errors.password = 'Required'
+    } else if (values.password.length < 8) {
+      errors.password = 'Must be 8 characters or more'
+    }
+
+    if (isSigningUp) {
+      if (!values.username) {
+        errors.username = 'Required'
+      } else if (values.username.length < 4) {
+        errors.username = 'Must be 4 characters or more'
+      }
+
+      if (!values.repeatPass) {
+        errors.repeatPass = 'Required'
+      } else if (values.repeatPass !== values.password) {
+        errors.repeatPass = 'Password must match'
       }
     }
-    setUsertag('')
-    setPassword('')
-    history.push('/')
+
+    return errors
   }
+
+  // const history = useHistory()
 
   return (
     <div className="login-page container">
       {isSigningUp ? <p>Enter your credentials to sign up</p> : <p>Welcome!</p>}
-      {error ? (
-        <div className="login-page-error">
-          <p>{error}</p>
-        </div>
-      ) : null}
-      <form onSubmit={handleSubmit}>
-        <div className="login-page-field">
-          <input
-            onChange={(e: React.FormEvent<HTMLInputElement>) => {
-              setUsertag(e.currentTarget.value)
-            }}
-            className={
-              'login-page-input' + (usertag.length > 0 ? ' focused' : '')
-            }
-            type="text"
-            id="usertag"
-            value={usertag}
-          />
-          <label htmlFor="usertag">Usertag</label>
-        </div>
-        {isSigningUp ? (
-          <>
-            <div className="login-page-field">
-              <input
-                onChange={(e: React.FormEvent<HTMLInputElement>) => {
-                  setUsername(e.currentTarget.value)
-                }}
-                className={
-                  'login-page-input' + (username.length > 0 ? ' focused' : '')
-                }
-                type="text"
-                id="username"
-                value={username}
-              />
-              <label htmlFor="username">Username</label>
-            </div>
-          </>
-        ) : null}
-        <div className="login-page-field">
-          <input
-            onChange={(e: React.FormEvent<HTMLInputElement>) => {
-              setPassword(e.currentTarget.value)
-              setError('')
-            }}
-            className={
-              'login-page-input' + (password.length > 0 ? ' focused' : '')
-            }
-            type="password"
-            id="password"
-            value={password}
-          />
-          <label htmlFor="password">Password</label>
-        </div>
-        {isSigningUp ? (
-          <>
-            <div className="login-page-field">
-              <input
-                onChange={(e: React.FormEvent<HTMLInputElement>) => {
-                  setRepeatPass(e.currentTarget.value)
-                  setError('')
-                }}
-                className={
-                  'login-page-input' + (repeatPass.length > 0 ? ' focused' : '')
-                }
+      <Formik
+        initialValues={initialValues}
+        validate={validate}
+        onSubmit={(values, actions) => {
+          console.log(values)
+          setTimeout(() => actions.setSubmitting(false), 3000)
+        }}
+      >
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <MyTextInput id="usertag" name="usertag" label="Usertag" />
+
+            {isSigningUp ? (
+              <MyTextInput id="username" name="username" label="Username" />
+            ) : null}
+            <MyTextInput
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+            />
+
+            {isSigningUp ? (
+              <MyTextInput
+                id="repeatPass"
+                name="repeatPass"
+                label="Repeat password"
                 type="password"
-                id="repeat-pass"
-                value={repeatPass}
               />
-              <label htmlFor="repeat-pass">Repeat Password</label>
-            </div>
-          </>
-        ) : null}
-        <input
-          className="login-page-submit"
-          type="submit"
-          value={isSigningUp ? 'Sign Up' : 'Log In'}
-        />
-      </form>
+            ) : null}
+            <input
+              disabled={formik.isSubmitting ? true : false}
+              className="login-page-submit"
+              type="submit"
+              value={isSigningUp ? 'Sign Up' : 'Log In'}
+            />
+          </form>
+        )}
+      </Formik>
     </div>
   )
 }
