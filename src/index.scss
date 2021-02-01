@@ -20,6 +20,13 @@ body,
 body {
   background: #06090f;
   color: #c9d1d9;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .container {

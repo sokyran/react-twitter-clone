@@ -19,6 +19,47 @@
     margin: 0;
     font-weight: 900;
     font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  &-buttons {
+    margin-left: auto;
+
+    button {
+      font-weight: 700;
+      height: 30px;
+      width: 80px;
+      align-self: center;
+
+      border-radius: 50px;
+      outline: none;
+
+      cursor: pointer;
+
+      transition: background-color 0.2s ease-in, color 0.1s ease;
+    }
+
+    &-log {
+      background: none;
+      border: 1px solid #fff;
+      color: #fff;
+
+      &:hover {
+        background: #2df1ff48;
+      }
+    }
+
+    &-sign {
+      margin-left: 10px;
+      color: $main-color;
+      border: none;
+
+      &:hover {
+        color: #2d3bff;
+        background: #b2bae4;
+      }
+    }
   }
 
   &-dropdown {

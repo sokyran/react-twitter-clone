@@ -9,7 +9,7 @@ import './tweet-container-styles.scss'
 export const TweetContainer = () => {
   const { loading, data } = useQuery(GET_TWEETS, { pollInterval: 5000 })
   return (
-    <div className="tweet-container-wrapper">
+    <div className="tweet-container">
       {!loading && data && data.tweets ? (
         data.tweets.map((tweet: ITweet) => (
           <Tweet tweet={tweet} key={tweet.id} />

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { LoginFooter } from './components/LoginFooter'
 import { TweetInput } from './components/TweetInput'
 import { IUser } from './utils/types'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -25,7 +24,6 @@ function App() {
       )
       setUser(result)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginResult.data])
 
   useEffect(() => {
@@ -86,7 +84,6 @@ function App() {
               {user ? <TweetInput user={user} /> : null}
               <TweetContainer />
             </div>
-            {!user ? <LoginFooter /> : null}
           </Route>
         </Switch>
       )}
