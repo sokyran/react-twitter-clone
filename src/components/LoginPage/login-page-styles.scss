@@ -32,27 +32,28 @@
     color: #fff;
     font-size: 1.2rem;
 
-    padding-left: 5px;
+    padding-left: 15px;
+    padding-top: 15px;
   }
 
   .error-field {
-    border-color: #fc8181;
+    border-color: $error-color;
 
     & ~ label {
-      color: #fc8181;
+      color: $error-color;
     }
   }
 
   &-error {
     padding-top: 5px;
     padding-left: 10px;
-    color: #fc8181;
+    color: $error-color;
   }
 
   &-input ~ label {
     position: absolute;
     left: 2%;
-    top: 18%;
+    top: 16px;
     width: 100%;
     color: #aaa;
     transition: 0.3s;
@@ -66,16 +67,16 @@
 
     & ~ label {
       color: $main-color;
-      top: 0;
-      left: 5px;
+      top: 5px;
+      left: 13px;
       font-size: 0.8rem;
     }
   }
 
   .focused {
     & ~ label {
-      top: 0;
-      left: 5px;
+      top: 5px;
+      left: 13px;
       font-size: 0.8rem;
     }
   }
@@ -107,5 +108,22 @@
           rgba(99, 172, 245, 0.15) 0px 0px 3px 1px;
       }
     }
+  }
+}
+
+.error-message {
+  width: 300px;
+  height: 50px;
+  background: rgba(240, 54, 116, 0.233);
+  border-radius: 20px;
+  border-color: $error-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 20px;
+
+  p {
+    margin: auto auto;
   }
 }

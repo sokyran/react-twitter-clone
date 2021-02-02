@@ -1,7 +1,9 @@
-import { Formik, FormikErrors, useField } from 'formik'
-import React from 'react'
-// import { useHistory } from 'react-router-dom'
+import { Formik, FormikErrors, FormikHelpers } from 'formik'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { ErrorMessage } from './ErrorMessage'
 import './login-page-styles.scss'
+import { MyTextInput } from './MyTextInput'
 
 interface Props {
   handleLogin: (usertag: string, password: string) => void
@@ -21,38 +23,6 @@ interface FormProps {
   repeatPass: string
 }
 
-interface TextInputProps {
-  id: string
-  name: string
-  label: string
-  type?: string
-}
-
-const MyTextInput = ({ id, name, label, type = 'text' }: TextInputProps) => {
-  const [field, { error, touched }] = useField({
-    name,
-    type,
-  })
-  return (
-    <div className={'login-page-field'}>
-      <input
-        id={id}
-        type={type}
-        {...field}
-        className={
-          'login-page-input' +
-          (field.value.length > 0 ? ' focused' : '') +
-          (touched && error ? ' error-field' : '')
-        }
-      />
-      <label htmlFor={id || name}>{label}</label>
-      {touched && error ? (
-        <div className="login-page-error">{error}</div>
-      ) : null}
-    </div>
-  )
-}
-
 export const LoginPage = ({
   handleLogin,
   handleSignUp,
@@ -63,6 +33,29 @@ export const LoginPage = ({
     username: '',
     password: '',
     repeatPass: '',
+  }
+  const history = useHistory()
+  const [error, setError] = useState('')
+
+  const onSubmit = async (
+    values: FormProps,
+    actions: FormikHelpers<FormProps>
+  ) => {
+    const { usertag, username, password } = values
+    console.log(values)
+    try {
+      isSigningUp
+        ? await handleSignUp(usertag, username, password, null)
+        : await handleLogin(usertag, password)
+      history.push('/')
+    } catch (error) {
+      actions.setSubmitting(false)
+      actions.setFieldValue('password', '', false)
+      setError(error.message)
+      setTimeout(() => {
+        setError('')
+      }, 5000)
+    }
   }
 
   const validate = (values: FormProps) => {
@@ -97,18 +90,14 @@ export const LoginPage = ({
     return errors
   }
 
-  // const history = useHistory()
-
   return (
     <div className="login-page container">
       {isSigningUp ? <p>Enter your credentials to sign up</p> : <p>Welcome!</p>}
+      {error ? <ErrorMessage error={error} /> : null}
       <Formik
         initialValues={initialValues}
         validate={validate}
-        onSubmit={(values, actions) => {
-          console.log(values)
-          setTimeout(() => actions.setSubmitting(false), 3000)
-        }}
+        onSubmit={onSubmit}
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
@@ -117,6 +106,7 @@ export const LoginPage = ({
             {isSigningUp ? (
               <MyTextInput id="username" name="username" label="Username" />
             ) : null}
+
             <MyTextInput
               id="password"
               name="password"

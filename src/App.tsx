@@ -4,7 +4,6 @@ import { IUser } from './utils/types'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { LoginPage } from './components/LoginPage'
 import { useMutation } from '@apollo/client'
-import { ClassicSpinner } from 'react-spinners-kit'
 import { Navbar } from './components/Navbar'
 import { SIGN_IN, SIGN_UP } from './utils/queries'
 import { TweetContainer } from './containers/TweetContainer'
@@ -39,54 +38,47 @@ function App() {
     }
   }, [])
 
-  const handleLogin = (usertag: string, password: string) => {
-    authenticateUser({ variables: { usertag, password } })
+  const handleLogin = async (
+    usertag: string,
+    password: string
+  ): Promise<void> => {
+    await authenticateUser({ variables: { usertag, password } })
   }
 
-  const handleSignUp = (
+  const handleSignUp = async (
     usertag: string,
     username: string,
     password: string,
     avatar: string | null
-  ) => {
-    signUpUser({ variables: { usertag, username, password, avatar } })
+  ): Promise<void> => {
+    await signUpUser({ variables: { usertag, username, password, avatar } })
   }
 
   return (
     <Router>
       <Navbar user={user} />
-      {loginResult.loading ? (
-        <div className="loader">
-          <ClassicSpinner
-            size={150}
-            color="#00BFFF"
-            loading={loginResult.loading}
+      <Switch>
+        <Route path="/login">
+          <LoginPage
+            handleLogin={handleLogin}
+            handleSignUp={handleSignUp}
+            isSigningUp={false}
           />
-        </div>
-      ) : (
-        <Switch>
-          <Route path="/login">
-            <LoginPage
-              handleLogin={handleLogin}
-              handleSignUp={handleSignUp}
-              isSigningUp={false}
-            />
-          </Route>
-          <Route path="/signup">
-            <LoginPage
-              handleLogin={handleLogin}
-              handleSignUp={handleSignUp}
-              isSigningUp={true}
-            />
-          </Route>
-          <Route path="/">
-            <div className="container">
-              {user ? <TweetInput user={user} /> : null}
-              <TweetContainer />
-            </div>
-          </Route>
-        </Switch>
-      )}
+        </Route>
+        <Route path="/signup">
+          <LoginPage
+            handleLogin={handleLogin}
+            handleSignUp={handleSignUp}
+            isSigningUp={true}
+          />
+        </Route>
+        <Route path="/">
+          <div className="container">
+            {user ? <TweetInput user={user} /> : null}
+            <TweetContainer />
+          </div>
+        </Route>
+      </Switch>
     </Router>
   )
 }
