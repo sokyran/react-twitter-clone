@@ -5,12 +5,10 @@ import React, {
   useState,
   useCallback,
 } from 'react'
-import { useHistory } from 'react-router-dom'
 import './dropdown-styles.scss'
 
 export const DropdownMenu = ({ children }: PropsWithChildren<{}>) => {
   const [showMenu, setShowMenu] = useState(false)
-  const history = useHistory()
 
   const refContainer = useRef<HTMLDivElement>({} as HTMLDivElement)
 

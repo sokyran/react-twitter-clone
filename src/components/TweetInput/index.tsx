@@ -30,10 +30,40 @@ export const TweetInput = ({ user }: Props) => {
         />
       </div>
       <div className="text-input-tools">
-        <div className="text-input-tools-circle">
-          <CircularProgressbar value={tweetText.length / 2} strokeWidth={15} />
+        <div className="text-input-tools-length-and-circle">
+          <div className="text-input-tools-circle">
+            <CircularProgressbar
+              value={tweetText.length / 2}
+              strokeWidth={15}
+              styles={
+                tweetText.length > 200
+                  ? {
+                      path: {
+                        stroke: '#ff3b3b',
+                      },
+                    }
+                  : {}
+              }
+            />
+          </div>
+          <span className="text-input-tools-length">
+            {tweetText.length} / 200
+          </span>
         </div>
-        <button className="text-input-tools-btn" onClick={handlePost}>
+        <span
+          className={
+            'text-input-tools-error' + (tweetText.length > 200 ? ' shown' : '')
+          }
+        >
+          Your tweet is too long!
+        </span>
+        <button
+          disabled={
+            tweetText.length === 0 || tweetText.length > 200 ? true : false
+          }
+          className="text-input-tools-btn"
+          onClick={handlePost}
+        >
           Tweet
         </button>
       </div>

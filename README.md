@@ -27,7 +27,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Features to add
 
 - [x] Add new tweet
-- [ ] Move to Formik
+- [x] Move to Formik
 - [ ] Like a tweet
 - [ ] Post a comment
 - [ ] Retweet
