@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { TweetInput } from './components/TweetInput'
-import { IUser } from './utils/types'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { LoginPage } from './components/LoginPage'
 import { useMutation } from '@apollo/client'
 import { Navbar } from './components/Navbar'
 import { SIGN_IN, SIGN_UP } from './utils/queries'
 import { TweetContainer } from './containers/TweetContainer'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from './store/userReducer'
+import { RootState } from './store'
 
 function App() {
-  const [user, setUser] = useState<IUser | null>(null)
+  const user = useSelector((state: RootState) => state.user)
+  const dispatch = useDispatch()
 
   const [authenticateUser, loginResult] = useMutation(SIGN_IN)
   const [signUpUser] = useMutation(SIGN_UP)
@@ -19,10 +22,11 @@ function App() {
       const result = loginResult.data.signIn
       localStorage.setItem(
         'user',
-        JSON.stringify({ ...result, expires: Date.now() + 3600000 })
+        JSON.stringify({ ...result, expires: Date.now() + 3600000 }) // 60m
       )
-      setUser(result)
+      dispatch(setUser(result))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginResult.data])
 
   useEffect(() => {
@@ -31,11 +35,12 @@ function App() {
     if (storageUser) {
       const parsedUser = JSON.parse(storageUser)
       if (parsedUser.expires > Date.now()) {
-        setUser(parsedUser)
+        dispatch(setUser(parsedUser))
       } else {
         localStorage.removeItem('user')
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogin = async (
@@ -75,7 +80,7 @@ function App() {
         <Route path="/">
           <div className="container">
             {user ? <TweetInput user={user} /> : null}
-            <TweetContainer />
+            <TweetContainer user={user} />
           </div>
         </Route>
       </Switch>

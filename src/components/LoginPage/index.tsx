@@ -42,7 +42,6 @@ export const LoginPage = ({
     actions: FormikHelpers<FormProps>
   ) => {
     const { usertag, username, password } = values
-    console.log(values)
     try {
       isSigningUp
         ? await handleSignUp(usertag, username, password, null)
@@ -51,6 +50,7 @@ export const LoginPage = ({
     } catch (error) {
       actions.setSubmitting(false)
       actions.setFieldValue('password', '', false)
+      actions.setFieldValue('repeatPass', '', false)
       setError(error.message)
       setTimeout(() => {
         setError('')

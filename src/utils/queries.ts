@@ -7,6 +7,7 @@ export const SIGN_IN = gql`
       username
       usertag
       avatar
+      likedTweets
     }
   }
 `
@@ -53,12 +54,29 @@ export const GET_TWEETS = gql`
       text
       date
       userId
+      likes
       imageUrl
       user {
         username
         usertag
         avatar
       }
+    }
+  }
+`
+
+export const LIKE_TWEET = gql`
+  mutation likeTweet($id: Int!) {
+    likeTweet(id: $id) {
+      likes
+    }
+  }
+`
+
+export const UNLIKE_TWEET = gql`
+  mutation unlikeTweet($id: Int!) {
+    unlikeTweet(id: $id) {
+      likes
     }
   }
 `

@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './tweet-styles.scss'
-import { ITweet } from '../../utils/types'
+import { ITweet, IUser } from '../../utils/types'
 import { timeSince } from '../../utils/timeSince'
+import { LIKE_TWEET, UNLIKE_TWEET } from '../../utils/queries'
+import { useMutation } from '@apollo/client'
 
 interface Props {
   tweet: ITweet
+  user: IUser | null
 }
 
-export const Tweet = ({ tweet }: Props) => {
+export const Tweet = ({ tweet, user }: Props) => {
+  const [likes, setLikes] = useState(tweet.likes)
+  const [touched, setTouched] = useState(false)
+  if (user && user.likedTweets.indexOf(tweet.id) > -1) {
+    setTouched(true)
+  }
+  const [likeTweet] = useMutation(LIKE_TWEET)
+  const [unlikeTweet] = useMutation(UNLIKE_TWEET)
   return (
     <div className="tweet">
       <div className="tweet-avatar-replies-container">
@@ -30,11 +40,25 @@ export const Tweet = ({ tweet }: Props) => {
         ) : null}
 
         <div className="tweet-buttons">
-          <button className="tweet-buttons-like" data-count="45">
-            <i className="far fa-heart fa-lg"></i>
-          </button>
-          <button className="tweet-buttons-comment" data-count="12">
+          <button className="tweet-buttons-comment">
             <i className="far fa-comment fa-lg"></i>
+          </button>
+          <button
+            className={'tweet-buttons-like' + (touched ? ' like-touched' : '')}
+            data-count={likes}
+            onClick={async () => {
+              if (!touched) {
+                setLikes(likes + 1)
+                setTouched(true)
+                await likeTweet({ variables: { id: Number(tweet.id) } })
+              } else {
+                setLikes(likes - 1)
+                setTouched(false)
+                await unlikeTweet({ variables: { id: Number(tweet.id) } })
+              }
+            }}
+          >
+            <i className="far fa-heart fa-lg"></i>
           </button>
         </div>
       </div>
