@@ -1,6 +1,16 @@
 @import '../../utils/globals.scss';
 
+@keyframes appearance {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .tweet {
+  animation: appearance 1s linear;
   width: 100%;
   border: 1px solid $border-color;
   border-radius: 10px;
