@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
-import './input-styles.scss'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 import { ResizableInput } from '../ResizableInput'
-import { IUser } from '../../utils/types'
 import { CREATE_TWEET } from '../../utils/queries'
 import { useMutation } from '@apollo/client'
+import './input-styles.scss'
 
-interface Props {
-  user: IUser
-}
-
-export const TweetInput = ({ user }: Props) => {
+export const TweetInput = () => {
   const [tweetText, setTweetText] = useState('')
   const [createTweet] = useMutation(CREATE_TWEET)
 

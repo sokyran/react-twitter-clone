@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
-import { TweetInput } from './components/TweetInput'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { LoginPage } from './components/LoginPage'
-import { useMutation } from '@apollo/client'
-import { Navbar } from './components/Navbar'
-import { SIGN_IN, SIGN_UP } from './utils/queries'
 import { TweetContainer } from './containers/TweetContainer'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from './store/userReducer'
+import { TweetInput } from './components/TweetInput'
+import { SIGN_IN, SIGN_UP } from './utils/queries'
+import { LoginPage } from './components/LoginPage'
+import { setUser } from './store/user/actions'
+import { Navbar } from './components/Navbar'
+import { useMutation } from '@apollo/client'
 import { RootState } from './store'
+import { ErrorPopup } from './components/ErrorPopup'
 
 function App() {
   const user = useSelector((state: RootState) => state.user)
@@ -61,7 +62,8 @@ function App() {
 
   return (
     <Router>
-      <Navbar user={user} />
+      <ErrorPopup />
+      <Navbar />
       <Switch>
         <Route path="/login">
           <LoginPage
@@ -79,8 +81,8 @@ function App() {
         </Route>
         <Route path="/">
           <div className="container">
-            {user ? <TweetInput user={user} /> : null}
-            <TweetContainer user={user} />
+            {user ? <TweetInput /> : null}
+            <TweetContainer />
           </div>
         </Route>
       </Switch>

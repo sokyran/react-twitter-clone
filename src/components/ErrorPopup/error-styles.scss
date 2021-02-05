@@ -1,0 +1,42 @@
+@import '../../utils/globals.scss';
+
+@keyframes popup {
+  10% {
+    transform: translateY(0);
+  }
+  90% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.error-popup {
+  transform: translateY(-200%);
+
+  font-family: $font-family;
+  font-weight: 500;
+  font-size: 1.2rem;
+
+  text-align: center;
+
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  animation: popup 4.9s ease forwards;
+
+  color: #000;
+
+  height: fit-content;
+  margin: 30px auto;
+
+  width: 500px;
+  padding: 10px;
+
+  outline: none;
+  border-radius: 10px;
+  background: $error-color;
+  border: 2px solid #000;
+}

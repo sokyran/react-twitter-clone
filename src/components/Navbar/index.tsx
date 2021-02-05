@@ -1,14 +1,12 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { IUser } from '../../utils/types'
 import { DropdownMenu } from '../DropdownMenu'
+import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 import './navbar-styles.scss'
 
-interface Props {
-  user: IUser | null
-}
-
-export const Navbar = ({ user }: Props) => {
+export const Navbar = () => {
+  const user = useSelector((state: RootState) => state.user)
   const history = useHistory()
 
   return (

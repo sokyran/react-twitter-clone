@@ -4,6 +4,8 @@ import { ITweet, IUser } from '../../utils/types'
 import { timeSince } from '../../utils/timeSince'
 import { LIKE_TWEET, UNLIKE_TWEET } from '../../utils/queries'
 import { useMutation } from '@apollo/client'
+import { setError } from '../../store/error/actions'
+import { useDispatch } from 'react-redux'
 
 interface Props {
   tweet: ITweet
@@ -12,10 +14,12 @@ interface Props {
 
 export const Tweet = ({ tweet, user }: Props) => {
   const [likes, setLikes] = useState(tweet.likes)
-  const [touched, setTouched] = useState(false)
-  if (user && user.likedTweets.indexOf(tweet.id) > -1) {
-    setTouched(true)
-  }
+  const [touched, setTouched] = useState<Boolean>(
+    user ? user.likedTweets.includes(Number(tweet.id)) : false
+  )
+
+  const dispatch = useDispatch()
+
   const [likeTweet] = useMutation(LIKE_TWEET)
   const [unlikeTweet] = useMutation(UNLIKE_TWEET)
   return (
@@ -47,14 +51,18 @@ export const Tweet = ({ tweet, user }: Props) => {
             className={'tweet-buttons-like' + (touched ? ' like-touched' : '')}
             data-count={likes}
             onClick={async () => {
-              if (!touched) {
-                setLikes(likes + 1)
-                setTouched(true)
-                await likeTweet({ variables: { id: Number(tweet.id) } })
+              if (user) {
+                if (!touched) {
+                  await likeTweet({ variables: { id: Number(tweet.id) } })
+                  setLikes(likes + 1)
+                  setTouched(true)
+                } else {
+                  await unlikeTweet({ variables: { id: Number(tweet.id) } })
+                  setLikes(likes - 1)
+                  setTouched(false)
+                }
               } else {
-                setLikes(likes - 1)
-                setTouched(false)
-                await unlikeTweet({ variables: { id: Number(tweet.id) } })
+                dispatch(setError('Must be authorized to like tweets!'))
               }
             }}
           >
