@@ -11,10 +11,10 @@ export interface ITweet {
 }
 
 export interface IUser {
+  id: number
   username: string
   usertag: string
   avatar: string
-  likedTweets: number[]
   accessToken?: string
 }
 

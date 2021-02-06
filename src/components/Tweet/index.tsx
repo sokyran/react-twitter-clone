@@ -10,12 +10,15 @@ import { useDispatch } from 'react-redux'
 interface Props {
   tweet: ITweet
   user: IUser | null
+  likedTweets: number[]
 }
 
-export const Tweet = ({ tweet, user }: Props) => {
+export const Tweet = ({ tweet, user, likedTweets }: Props) => {
   const [likes, setLikes] = useState(tweet.likes)
   const [touched, setTouched] = useState<Boolean>(
-    user ? user.likedTweets.includes(Number(tweet.id)) : false
+    likedTweets && likedTweets.length > 0
+      ? likedTweets.includes(Number(tweet.id))
+      : false
   )
 
   const dispatch = useDispatch()
@@ -58,7 +61,7 @@ export const Tweet = ({ tweet, user }: Props) => {
                   setTouched(true)
                 } else {
                   await unlikeTweet({ variables: { id: Number(tweet.id) } })
-                  setLikes(likes - 1)
+                  setLikes(likes - 1 >= 0 ? likes - 1 : 0)
                   setTouched(false)
                 }
               } else {

@@ -7,7 +7,7 @@ export const SIGN_IN = gql`
       username
       usertag
       avatar
-      likedTweets
+      id
     }
   }
 `
@@ -78,5 +78,11 @@ export const UNLIKE_TWEET = gql`
     unlikeTweet(id: $id) {
       likes
     }
+  }
+`
+
+export const SHOW_LIKES = gql`
+  query showLikes($id: Int) {
+    showLikes(id: $id)
   }
 `

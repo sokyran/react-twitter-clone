@@ -28,8 +28,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - [x] Add new tweet
 - [x] Move to Formik
-- [ ] Like a tweet
-- [ ] Add Redux
+- [x] Like a tweet
+- [x] Add Redux
 - [ ] Post a comment
 - [ ] Retweet
 - [ ] Detailed tweet page
