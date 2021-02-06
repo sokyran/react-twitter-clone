@@ -10,7 +10,7 @@
 }
 
 .tweet {
-  animation: appearance 1s linear;
+  animation: appearance 1s ease-in-out;
   width: 100%;
   border: 1px solid $border-color;
   border-radius: 10px;
