@@ -9,6 +9,21 @@ export const Navbar = () => {
   const user = useSelector((state: RootState) => state.user)
   const history = useHistory()
 
+  const dropdownContent = (
+    <button
+      onClick={() => {
+        localStorage.removeItem('user')
+        window.location.reload()
+      }}
+    >
+      Sign out
+    </button>
+  )
+
+  const dropdownButton = (
+    <img className="navbar-dropdown-image" src={user?.avatar} alt="Profile" />
+  )
+
   return (
     <div className="navbar">
       <div className="navbar-container">
@@ -17,14 +32,10 @@ export const Navbar = () => {
         </p>
         {user ? (
           <div className="navbar-dropdown">
-            <DropdownMenu>
-              <img
-                className="navbar-dropdown-image"
-                src={user.avatar}
-                alt="Profile"
-              />
-            </DropdownMenu>
-            <p className="navbar-dropdown-username">{user.username}</p>
+            <DropdownMenu
+              dropdownContent={dropdownContent}
+              dropdownButton={dropdownButton}
+            />
           </div>
         ) : (
           <div className="navbar-buttons">

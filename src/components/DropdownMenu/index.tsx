@@ -1,13 +1,12 @@
-import React, {
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-} from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import './dropdown-styles.scss'
 
-export const DropdownMenu = ({ children }: PropsWithChildren<{}>) => {
+interface Props {
+  dropdownButton: React.ReactNode
+  dropdownContent: React.ReactNode
+}
+
+export const DropdownMenu = ({ dropdownButton, dropdownContent }: Props) => {
   const [showMenu, setShowMenu] = useState(false)
 
   const refContainer = useRef<HTMLDivElement>({} as HTMLDivElement)
@@ -32,7 +31,7 @@ export const DropdownMenu = ({ children }: PropsWithChildren<{}>) => {
   }
 
   return (
-    <div className="dropdown">
+    <div className={'dropdown' + (showMenu ? ' active' : '')}>
       <div
         style={{
           border: 0,
@@ -45,19 +44,11 @@ export const DropdownMenu = ({ children }: PropsWithChildren<{}>) => {
         }}
         onClick={handleOpen}
       >
-        {children}
+        {dropdownButton}
       </div>
       {showMenu ? (
         <div className="dropdown-content" ref={refContainer}>
-          <button
-            onClick={() => {
-              localStorage.removeItem('user')
-              window.location.reload()
-              setShowMenu(false)
-            }}
-          >
-            SignOut
-          </button>
+          {dropdownContent}
         </div>
       ) : null}
     </div>

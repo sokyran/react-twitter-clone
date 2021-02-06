@@ -14,14 +14,13 @@ interface Props {
 }
 
 export const Tweet = ({ tweet, user, likedTweets }: Props) => {
+  const dispatch = useDispatch()
   const [likes, setLikes] = useState(tweet.likes)
   const [touched, setTouched] = useState<Boolean>(
     likedTweets && likedTweets.length > 0
       ? likedTweets.includes(Number(tweet.id))
       : false
   )
-
-  const dispatch = useDispatch()
 
   const [likeTweet] = useMutation(LIKE_TWEET)
   const [unlikeTweet] = useMutation(UNLIKE_TWEET)
@@ -69,7 +68,7 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
               }
             }}
           >
-            <i className="far fa-heart fa-lg"></i>
+            <i className={'fa-heart fa-lg' + (touched ? ' fas' : ' far')}></i>
           </button>
         </div>
       </div>
