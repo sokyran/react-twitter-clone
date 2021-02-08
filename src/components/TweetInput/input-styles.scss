@@ -105,6 +105,7 @@
       &:disabled {
         border-color: darken($color: $main-color, $amount: 20);
         color: darken($color: $main-color, $amount: 20);
+        cursor: default;
       }
 
       &:enabled:hover {

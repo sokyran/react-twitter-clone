@@ -9,6 +9,18 @@
   }
 }
 
+@keyframes touchedLike {
+  0% {
+    transform: scale(1.1);
+  }
+  20% {
+    transform: scale(0.9);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+}
+
 .tweet {
   animation: appearance 1s ease-in-out;
   width: 100%;
@@ -91,6 +103,7 @@
       }
       i {
         color: #fa4059;
+        animation: touchedLike 1s ease-in-out;
       }
     }
 

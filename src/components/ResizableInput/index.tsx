@@ -13,7 +13,7 @@ export const ResizableInput = ({
 }: Props) => {
   const [rows, setRows] = useState(3)
   const minRows = 3
-  const maxRows = 10
+  const maxRows = 100
 
   const lineHeight = 20
 

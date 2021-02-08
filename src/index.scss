@@ -16,6 +16,10 @@ body,
   height: 100%;
 }
 
+#forBlur {
+  transition: filter 0.1s linear;
+}
+
 body {
   background: #06090f;
   color: #c9d1d9;

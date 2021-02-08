@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import './tweet-styles.scss'
+import { LIKE_TWEET, UNLIKE_TWEET } from '../../utils/queries'
+import { setError } from '../../store/error/actions'
 import { ITweet, IUser } from '../../utils/types'
 import { timeSince } from '../../utils/timeSince'
-import { LIKE_TWEET, UNLIKE_TWEET } from '../../utils/queries'
 import { useMutation } from '@apollo/client'
-import { setError } from '../../store/error/actions'
 import { useDispatch } from 'react-redux'
+import './tweet-styles.scss'
+import { openCommentModal } from '../../store/comment/actions'
 
 interface Props {
   tweet: ITweet
@@ -46,7 +47,14 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
         ) : null}
 
         <div className="tweet-buttons">
-          <button className="tweet-buttons-comment">
+          <button
+            className="tweet-buttons-comment"
+            onClick={() => {
+              dispatch(
+                openCommentModal({ originalTweet: tweet, respondent: user })
+              )
+            }}
+          >
             <i className="far fa-comment fa-lg"></i>
           </button>
           <button

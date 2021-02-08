@@ -86,3 +86,15 @@ export const SHOW_LIKES = gql`
     showLikes(id: $id)
   }
 `
+
+export const CREATE_COMMENT = gql`
+  mutation createComment($text: String!, $commentParent: Int!) {
+    createComment(
+      createCommentInput: { text: $text, commentParent: $commentParent }
+    ) {
+      id
+      text
+      date
+    }
+  }
+`

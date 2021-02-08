@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { TweetContainer } from './containers/TweetContainer'
+import { CommentModal } from './components/CommentModal'
 import { useDispatch, useSelector } from 'react-redux'
+import { ErrorPopup } from './components/ErrorPopup'
 import { TweetInput } from './components/TweetInput'
 import { SIGN_IN, SIGN_UP } from './utils/queries'
 import { LoginPage } from './components/LoginPage'
@@ -9,7 +11,6 @@ import { setUser } from './store/user/actions'
 import { Navbar } from './components/Navbar'
 import { useMutation } from '@apollo/client'
 import { RootState } from './store'
-import { ErrorPopup } from './components/ErrorPopup'
 
 function App() {
   const user = useSelector((state: RootState) => state.user)
@@ -61,32 +62,37 @@ function App() {
   }
 
   return (
-    <Router>
-      <ErrorPopup />
-      <Navbar />
-      <Switch>
-        <Route path="/login">
-          <LoginPage
-            handleLogin={handleLogin}
-            handleSignUp={handleSignUp}
-            isSigningUp={false}
-          />
-        </Route>
-        <Route path="/signup">
-          <LoginPage
-            handleLogin={handleLogin}
-            handleSignUp={handleSignUp}
-            isSigningUp={true}
-          />
-        </Route>
-        <Route path="/">
-          <div className="container">
-            {user ? <TweetInput /> : null}
-            <TweetContainer />
-          </div>
-        </Route>
-      </Switch>
-    </Router>
+    <>
+      <CommentModal />
+      <Router>
+        <div id="forBlur">
+          <ErrorPopup />
+          <Navbar />
+          <Switch>
+            <Route path="/login">
+              <LoginPage
+                handleLogin={handleLogin}
+                handleSignUp={handleSignUp}
+                isSigningUp={false}
+              />
+            </Route>
+            <Route path="/signup">
+              <LoginPage
+                handleLogin={handleLogin}
+                handleSignUp={handleSignUp}
+                isSigningUp={true}
+              />
+            </Route>
+            <Route path="/">
+              <div className="container">
+                {user ? <TweetInput /> : null}
+                <TweetContainer />
+              </div>
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </>
   )
 }
 
