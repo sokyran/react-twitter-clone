@@ -22,6 +22,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Typescript event types (https://blaipratdesaba.com/react-typescript-cheatsheet-form-elements-and-onchange-event-types-8c2baf03230c)
 
+- Build tree from list of objects (https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/)
+
 # TODO
 
 ## Features to add
@@ -30,7 +32,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [x] Move to Formik
 - [x] Like a tweet
 - [x] Add Redux
+- [ ] Add Dataloaders
 - [ ] Post a comment
-- [ ] Retweet
 - [ ] Detailed tweet page
 - [ ] User profile tweets
+- [ ] Retweet
