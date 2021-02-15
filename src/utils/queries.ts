@@ -65,10 +65,49 @@ export const GET_TWEETS = gql`
   }
 `
 
+export const GET_TWEET_BY_ID = gql`
+  query getTweet($id: Int!) {
+    tweet(id: $id, loadComments: true) {
+      text
+      date
+      id
+      likes
+      user {
+        username
+        usertag
+        avatar
+      }
+      comments {
+        id
+        text
+        date
+        likes
+        user {
+          username
+          usertag
+          avatar
+        }
+        comments {
+          id
+          text
+          date
+          likes
+          user {
+            username
+            usertag
+            avatar
+          }
+        }
+      }
+    }
+  }
+`
+
 export const LIKE_TWEET = gql`
   mutation likeTweet($id: Int!) {
     likeTweet(id: $id) {
       likes
+      id
     }
   }
 `
@@ -77,6 +116,7 @@ export const UNLIKE_TWEET = gql`
   mutation unlikeTweet($id: Int!) {
     unlikeTweet(id: $id) {
       likes
+      id
     }
   }
 `
@@ -88,9 +128,9 @@ export const SHOW_LIKES = gql`
 `
 
 export const CREATE_COMMENT = gql`
-  mutation createComment($text: String!, $commentParent: Int!) {
+  mutation createComment($text: String!, $parentTweetId: Int!) {
     createComment(
-      createCommentInput: { text: $text, commentParent: $commentParent }
+      createCommentInput: { text: $text, parentTweetId: $parentTweetId }
     ) {
       id
       text

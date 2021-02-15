@@ -1,7 +1,8 @@
+@import './utils/globals.scss';
+
 html,
 body,
 #root {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -52,4 +53,16 @@ body {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.tweet-wrapper {
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  margin: 10px auto;
+  padding: 0;
+  // padding-bottom: 0;
+
+  .tweet:last-child .tweet-line {
+    display: none;
+  }
 }

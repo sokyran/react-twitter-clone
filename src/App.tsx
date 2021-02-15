@@ -11,6 +11,7 @@ import { setUser } from './store/user/actions'
 import { Navbar } from './components/Navbar'
 import { useMutation } from '@apollo/client'
 import { RootState } from './store'
+import { TweetDetails } from './components/TweetDetails'
 
 function App() {
   const user = useSelector((state: RootState) => state.user)
@@ -82,6 +83,9 @@ function App() {
                 handleSignUp={handleSignUp}
                 isSigningUp={true}
               />
+            </Route>
+            <Route path="/tweet/:id">
+              <TweetDetails />
             </Route>
             <Route path="/">
               <div className="container">

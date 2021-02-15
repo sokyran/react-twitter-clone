@@ -4,10 +4,11 @@ import { RootState } from '../store'
 export interface ITweet {
   id: number
   text: string
-  date: number
+  date: string
   user: IUser
   likes: number
   imageUrl?: string
+  comments?: ITweet[]
 }
 
 export interface IUser {

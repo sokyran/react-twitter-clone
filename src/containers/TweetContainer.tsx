@@ -14,10 +14,7 @@ export const TweetContainer = () => {
   const dispatch = useDispatch()
   const { tweets, user } = useSelector((state: RootState) => state)
   const { loading: tweetsLoading, data: tweetsData, error } = useQuery(
-    GET_TWEETS,
-    {
-      pollInterval: 10000,
-    }
+    GET_TWEETS
   )
 
   const { loading: likedLoading, data: likedData } = useQuery(SHOW_LIKES, {
@@ -46,12 +43,9 @@ export const TweetContainer = () => {
   return (
     <div className="tweet-container">
       {tweets.map((tweet: ITweet) => (
-        <Tweet
-          tweet={tweet}
-          user={user}
-          likedTweets={likedData.showLikes}
-          key={tweet.id}
-        />
+        <div key={tweet.id} className="tweet-wrapper">
+          <Tweet tweet={tweet} user={user} likedTweets={likedData.showLikes} />
+        </div>
       ))}
     </div>
   )

@@ -24,6 +24,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Build tree from list of objects (https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/)
 
+- Trigger only child onClick, not parent (https://stackoverflow.com/questions/39470071/onclick-of-both-child-and-parent-triggered-when-child-is-clicked)
+
 # TODO
 
 ## Features to add
@@ -32,8 +34,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [x] Move to Formik
 - [x] Like a tweet
 - [x] Add Redux
-- [ ] Add Dataloaders
-- [ ] Post a comment
+- [x] Add Dataloaders
+- [x] Post a comment
 - [ ] Detailed tweet page
 - [ ] User profile tweets
 - [ ] Retweet
