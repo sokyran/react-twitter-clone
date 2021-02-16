@@ -38,16 +38,18 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
         query: SHOW_LIKES,
         variables: { id: user?.id },
       })
-      store.writeQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-        data: {
-          showLikes: [
-            ...dataInStore!.showLikes,
-            Number(response.data.likeTweet.id),
-          ],
-        },
-      })
+      if (dataInStore) {
+        store.writeQuery({
+          query: SHOW_LIKES,
+          variables: { id: user?.id },
+          data: {
+            showLikes: [
+              ...dataInStore.showLikes,
+              Number(response.data.likeTweet.id),
+            ],
+          },
+        })
+      }
     },
   })
   const [unlikeTweet] = useMutation(UNLIKE_TWEET, {
@@ -60,17 +62,19 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
         query: SHOW_LIKES,
         variables: { id: user?.id },
       })
-      store.writeQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-        data: {
-          showLikes: [
-            ...dataInStore!.showLikes.filter(
-              (id) => id !== Number(response.data.unlikeTweet.id)
-            ),
-          ],
-        },
-      })
+      if (dataInStore) {
+        store.writeQuery({
+          query: SHOW_LIKES,
+          variables: { id: user?.id },
+          data: {
+            showLikes: [
+              ...dataInStore.showLikes.filter(
+                (id) => id !== Number(response.data.unlikeTweet.id)
+              ),
+            ],
+          },
+        })
+      }
     },
   })
 
