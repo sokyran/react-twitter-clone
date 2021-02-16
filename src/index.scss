@@ -3,6 +3,7 @@
 html,
 body,
 #root {
+  scroll-behavior: smooth;
   margin: 0;
   padding: 0;
 }
@@ -60,7 +61,6 @@ body {
   border-radius: 10px;
   margin: 10px auto;
   padding: 0;
-  // padding-bottom: 0;
 
   .tweet:last-child .tweet-line {
     display: none;

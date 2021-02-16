@@ -8,8 +8,8 @@ import { ITweet } from '../../utils/types'
 import { useQuery } from '@apollo/client'
 import { RootState } from '../../store'
 import { Tweet } from '../Tweet'
-import moment from 'moment'
 import './tweet-details-styles.scss'
+import { BigTweet } from './BigTweet'
 
 interface ParamTypes {
   id: string
@@ -22,10 +22,12 @@ export const TweetDetails = () => {
 
   const { data, error } = useQuery(GET_TWEET_BY_ID, {
     variables: { id: Number(id) },
+    fetchPolicy: 'no-cache',
   })
 
   const { data: likedData } = useQuery(SHOW_LIKES, {
     variables: { id: user ? user.id : null },
+    fetchPolicy: 'no-cache',
   })
 
   if (error) {
@@ -33,36 +35,11 @@ export const TweetDetails = () => {
   }
   if (data && likedData) {
     const { tweet } = data
+
     return (
       <div className="container">
-        <div className="tweet-details">
-          <img
-            src={tweet.user.avatar}
-            alt=""
-            className="tweet-details-avatar"
-          ></img>
-          <div className="tweet-details-user">
-            <div className="tweet-details-user-username">
-              {tweet.user.username}
-            </div>
-            <div className="tweet-details-user-usertag">
-              @{tweet.user.usertag}
-            </div>
-          </div>
-          <div className="tweet-details-content">{tweet.text}</div>
-          <div className="tweet-details-date">
-            <span>{moment(tweet.date).format('HH:mm')}</span>
-            <span>{moment(tweet.date).format('MMMM DD YYYY')}</span>
-          </div>
-          <div className="tweet-details-stats">
-            <span
-              className="tweet-details-stats-likes"
-              data-count={tweet.likes}
-            >
-              likes
-            </span>
-          </div>
-          <div className="tweet-details-buttons"></div>
+        <div className="tweet-details-wrapper">
+          <BigTweet tweet={tweet} />
         </div>
         <h1 className="tweet-details-header">Comments</h1>
         {tweet.comments.map((comment: ITweet) => (
