@@ -1,9 +1,9 @@
-import { Formik, FormikErrors, FormikHelpers } from 'formik'
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Formik, FormikErrors, FormikHelpers } from 'formik'
+import { LoginTextInput } from './LoginTextInput'
 import { ErrorMessage } from './ErrorMessage'
+import { useHistory } from 'react-router-dom'
 import './login-page-styles.scss'
-import { MyTextInput } from './MyTextInput'
 
 interface Props {
   handleLogin: (usertag: string, password: string) => void
@@ -101,13 +101,13 @@ export const LoginPage = ({
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <MyTextInput id="usertag" name="usertag" label="Usertag" />
+            <LoginTextInput id="usertag" name="usertag" label="Usertag" />
 
             {isSigningUp ? (
-              <MyTextInput id="username" name="username" label="Username" />
+              <LoginTextInput id="username" name="username" label="Username" />
             ) : null}
 
-            <MyTextInput
+            <LoginTextInput
               id="password"
               name="password"
               label="Password"
@@ -115,7 +115,7 @@ export const LoginPage = ({
             />
 
             {isSigningUp ? (
-              <MyTextInput
+              <LoginTextInput
                 id="repeatPass"
                 name="repeatPass"
                 label="Repeat password"

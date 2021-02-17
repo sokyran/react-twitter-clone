@@ -1,19 +1,19 @@
 import React from 'react'
 import { useField } from 'formik'
 
-interface TextInputProps {
+interface InputProps {
   id: string
   name: string
   label: string
   type?: string
 }
 
-export const MyTextInput = ({
+export const LoginTextInput = ({
   id,
   name,
   label,
   type = 'text',
-}: TextInputProps) => {
+}: InputProps) => {
   const [field, { error, touched }] = useField({
     name,
     type,
