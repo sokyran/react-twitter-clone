@@ -12,6 +12,7 @@ import { Navbar } from './components/Navbar'
 import { useMutation } from '@apollo/client'
 import { RootState } from './store'
 import { TweetDetails } from './components/TweetDetails'
+import { Profile } from './components/Profile'
 
 function App() {
   const user = useSelector((state: RootState) => state.user)
@@ -31,20 +32,6 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginResult.data])
-
-  useEffect(() => {
-    const storageUser = localStorage.getItem('user')
-
-    if (storageUser) {
-      const parsedUser = JSON.parse(storageUser)
-      if (parsedUser.expires > Date.now()) {
-        dispatch(setUser(parsedUser))
-      } else {
-        localStorage.removeItem('user')
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const handleLogin = async (
     usertag: string,
@@ -86,6 +73,9 @@ function App() {
             </Route>
             <Route path="/tweet/:id">
               <TweetDetails />
+            </Route>
+            <Route path="/profile">
+              <Profile />
             </Route>
             <Route path="/">
               <div className="container">

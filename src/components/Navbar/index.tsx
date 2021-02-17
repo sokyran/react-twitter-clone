@@ -10,14 +10,25 @@ export const Navbar = () => {
   const history = useHistory()
 
   const dropdownContent = (
-    <button
-      onClick={() => {
-        localStorage.removeItem('user')
-        window.location.reload()
-      }}
-    >
-      Sign out
-    </button>
+    <>
+      <button
+        className="navbar-dropdown-item"
+        onClick={() => {
+          history.push('/profile')
+        }}
+      >
+        Profile
+      </button>
+      <button
+        className="navbar-dropdown-item"
+        onClick={() => {
+          localStorage.removeItem('user')
+          window.location.reload()
+        }}
+      >
+        Sign out
+      </button>
+    </>
   )
 
   const dropdownButton = (
