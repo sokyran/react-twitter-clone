@@ -11,11 +11,16 @@ export const DropdownMenu = ({ dropdownButton, dropdownContent }: Props) => {
 
   const refContainer = useRef<HTMLDivElement>({} as HTMLDivElement)
 
-  const handleClose = useCallback((e: Event) => {
-    const elem = e.target as HTMLDivElement
-    if (refContainer.current && !refContainer.current.contains(elem)) {
+  const handleClose = useCallback((e: Event | null) => {
+    if (!e) {
       setShowMenu(false)
       document.removeEventListener('click', handleClose)
+    } else {
+      const elem = e.target as HTMLDivElement
+      if (refContainer.current && !refContainer.current.contains(elem)) {
+        setShowMenu(false)
+        document.removeEventListener('click', handleClose)
+      }
     }
   }, [])
 
@@ -47,7 +52,13 @@ export const DropdownMenu = ({ dropdownButton, dropdownContent }: Props) => {
         {dropdownButton}
       </div>
       {showMenu ? (
-        <div className="dropdown-content" ref={refContainer}>
+        <div
+          className="dropdown-content"
+          ref={refContainer}
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            handleClose(null)
+          }}
+        >
           {dropdownContent}
         </div>
       ) : null}
