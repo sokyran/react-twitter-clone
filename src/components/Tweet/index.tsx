@@ -146,14 +146,16 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
         </div>
       </div>
       {comments && comments.length > 0
-        ? comments.map((comment) => (
-            <Tweet
-              tweet={comment}
-              user={user}
-              likedTweets={likedTweets}
-              key={comment.id}
-            />
-          ))
+        ? comments
+            .sort((a, b) => moment(a.date).unix() - moment(b.date).unix())
+            .map((comment) => (
+              <Tweet
+                tweet={comment}
+                user={user}
+                likedTweets={likedTweets}
+                key={comment.id}
+              />
+            ))
         : null}
     </>
   )
