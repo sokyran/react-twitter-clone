@@ -75,5 +75,19 @@
       border-radius: 50px;
       border: 1px solid #00000052;
     }
+
+    &-item {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 1.1rem;
+      font-family: $font-family;
+      font-weight: 700;
+      color: #fff;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

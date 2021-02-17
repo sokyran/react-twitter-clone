@@ -1,5 +1,7 @@
 @import '../../utils/globals.scss';
 
+$background-color: #235186;
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -8,13 +10,17 @@
     width: 120px;
     margin-top: 9px;
     position: absolute;
-    background-color: #fafafa;
+    background-color: $background-color;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     right: 0%;
     transform: translateX(0px);
-    padding: 12px 16px;
+    padding: 6px 16px 10px;
     border-radius: 5px;
     z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &.active::after {
@@ -27,7 +33,7 @@
     vertical-align: middle;
     width: 10px;
     height: 10px;
-    border-bottom: solid 9px #fff;
+    border-bottom: solid 9px $background-color;
     border-left: solid 9px transparent;
     border-right: solid 9px transparent;
   }
