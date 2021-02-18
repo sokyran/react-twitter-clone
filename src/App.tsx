@@ -24,10 +24,6 @@ function App() {
   useEffect(() => {
     if (loginResult.data) {
       const result = loginResult.data.signIn
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ ...result, expires: Date.now() + 3600000 }) // 60m
-      )
       dispatch(setUser(result))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

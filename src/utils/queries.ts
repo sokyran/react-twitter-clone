@@ -138,3 +138,23 @@ export const CREATE_COMMENT = gql`
     }
   }
 `
+
+export const UPDATE_USER = gql`
+  mutation updateUser(
+    $id: Int!
+    $usertag: String
+    $username: String
+    $avatar: String
+  ) {
+    updateProfile(
+      userUpdateInput: {
+        id: $id
+        usertag: $usertag
+        username: $username
+        avatar: $avatar
+      }
+    ) {
+      id
+    }
+  }
+`

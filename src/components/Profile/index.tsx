@@ -1,10 +1,14 @@
 import React from 'react'
 import { Formik, FormikErrors, FormikHelpers } from 'formik'
-import { Redirect } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Redirect, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import './profile-styles.scss'
 import { ProfileTextInput } from './ProfileTextInput'
+import { useMutation } from '@apollo/client'
+import { UPDATE_USER } from '../../utils/queries'
+import { setUser } from '../../store/user/actions'
+import { setError } from '../../store/error/actions'
+import './profile-styles.scss'
 
 interface FormProps {
   usertag: string
@@ -13,14 +17,31 @@ interface FormProps {
 }
 
 export const Profile = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
   const user = useSelector((state: RootState) => state.user)
-
-  const onSubmit = (values: FormProps, actions: FormikHelpers<FormProps>) => {
-    console.log(values)
-  }
+  const [updateUser, { error: graphError }] = useMutation(UPDATE_USER)
 
   if (!user) {
     return <Redirect to="/login" />
+  }
+
+  const onSubmit = async (
+    values: FormProps,
+    actions: FormikHelpers<FormProps>
+  ) => {
+    try {
+      const updatedUser = { id: user.id, ...values }
+      await updateUser({ variables: updatedUser })
+      dispatch(setUser(updatedUser))
+      history.push('/')
+    } catch (error) {
+      dispatch(
+        setError(
+          graphError?.graphQLErrors[0].extensions?.exception.response.message[0]
+        )
+      )
+    }
   }
 
   const initialValues: FormProps = {
