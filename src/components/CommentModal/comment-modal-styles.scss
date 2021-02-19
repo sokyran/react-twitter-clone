@@ -152,10 +152,12 @@
 
     .text {
       padding-top: 5px;
-      min-height: 80px;
+      min-height: 50px;
       width: 100%;
       margin-bottom: 20px;
-      white-space: pre;
+      white-space: pre-wrap;
+
+      overflow-wrap: break-word;
     }
   }
 
