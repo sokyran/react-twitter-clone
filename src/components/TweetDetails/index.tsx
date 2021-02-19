@@ -44,11 +44,7 @@ export const TweetDetails = () => {
         <h1 className="tweet-details-header">Comments</h1>
         {tweet.comments.map((comment: ITweet) => (
           <div className="tweet-wrapper" key={comment.id}>
-            <Tweet
-              tweet={comment}
-              user={comment.user}
-              likedTweets={likedData.showLikes}
-            />
+            <Tweet tweet={comment} likedTweets={likedData.showLikes} />
           </div>
         ))}
       </div>

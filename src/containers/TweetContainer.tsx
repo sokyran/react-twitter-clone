@@ -44,7 +44,7 @@ export const TweetContainer = () => {
     <div className="tweet-container">
       {tweets.map((tweet: ITweet) => (
         <div key={tweet.id} className="tweet-wrapper">
-          <Tweet tweet={tweet} user={user} likedTweets={likedData.showLikes} />
+          <Tweet tweet={tweet} likedTweets={likedData.showLikes} />
         </div>
       ))}
     </div>

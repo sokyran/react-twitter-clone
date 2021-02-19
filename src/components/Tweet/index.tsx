@@ -2,26 +2,27 @@ import React, { useState } from 'react'
 import { openCommentModal } from '../../store/comment/actions'
 import { LIKE_TWEET, SHOW_LIKES, UNLIKE_TWEET } from '../../utils/queries'
 import { setError } from '../../store/error/actions'
-import { ITweet, IUser } from '../../utils/types'
+import { ITweet } from '../../utils/types'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import './tweet-styles.scss'
+import { RootState } from '../../store'
 
 interface Props {
   tweet: ITweet
-  user: IUser | null
   likedTweets: number[] | null
 }
 
-interface DataStore {
+interface ICache {
   showLikes: number[]
 }
 
-export const Tweet = ({ tweet, user, likedTweets }: Props) => {
+export const Tweet = ({ tweet, likedTweets }: Props) => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const { user } = useSelector((state: RootState) => state)
   const [likes, setLikes] = useState(tweet.likes)
   const [touched, setTouched] = useState<Boolean>(
     likedTweets && likedTweets.length > 0
@@ -33,20 +34,17 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
       console.log(err)
       dispatch(setError(err.message))
     },
-    update: (store, response) => {
-      const dataInStore: DataStore | null = store.readQuery({
+    update: (cache, { data }) => {
+      const existingLikes: ICache | null = cache.readQuery({
         query: SHOW_LIKES,
         variables: { id: user?.id },
       })
-      if (dataInStore) {
-        store.writeQuery({
+      if (existingLikes) {
+        cache.writeQuery({
           query: SHOW_LIKES,
           variables: { id: user?.id },
           data: {
-            showLikes: [
-              ...dataInStore.showLikes,
-              Number(response.data.likeTweet.id),
-            ],
+            showLikes: [...existingLikes.showLikes, Number(data.likeTweet.id)],
           },
         })
       }
@@ -57,19 +55,19 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
       console.log(err)
       dispatch(setError(err.message))
     },
-    update: (store, response) => {
-      const dataInStore: DataStore | null = store.readQuery({
+    update: (cache, { data }) => {
+      const existingLikes: ICache | null = cache.readQuery({
         query: SHOW_LIKES,
         variables: { id: user?.id },
       })
-      if (dataInStore) {
-        store.writeQuery({
+      if (existingLikes) {
+        cache.writeQuery({
           query: SHOW_LIKES,
           variables: { id: user?.id },
           data: {
             showLikes: [
-              ...dataInStore.showLikes.filter(
-                (id) => id !== Number(response.data.unlikeTweet.id)
+              ...existingLikes.showLikes.filter(
+                (id) => id !== Number(data.unlikeTweet.id)
               ),
             ],
           },
@@ -103,45 +101,52 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
             ></div>
           ) : null}
           <div className="tweet-buttons">
-            <button
-              className="tweet-buttons-comment"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.stopPropagation()
-                if (user) {
-                  dispatch(
-                    openCommentModal({ originalTweet: tweet, respondent: user })
-                  )
-                } else {
-                  dispatch(setError('Must be authorized to comment tweets!'))
-                }
-              }}
-            >
-              <i className="far fa-comment fa-lg"></i>
-            </button>
-            <button
-              className={
-                'tweet-buttons-like' + (touched ? ' like-touched' : '')
-              }
-              data-count={likes}
-              onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
-                e.stopPropagation()
-                if (user) {
-                  if (!touched) {
-                    setTouched(true)
-                    setLikes(likes + 1)
-                    await likeTweet({ variables: { id: Number(tweet.id) } })
+            <div className="tweet-buttons-item">
+              <button
+                className="tweet-buttons-comment"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation()
+                  if (user) {
+                    dispatch(openCommentModal(tweet))
                   } else {
-                    setTouched(false)
-                    setLikes(likes - 1 >= 0 ? likes - 1 : 0)
-                    await unlikeTweet({ variables: { id: Number(tweet.id) } })
+                    dispatch(setError('Must be authorized to comment tweets!'))
                   }
-                } else {
-                  dispatch(setError('Must be authorized to like tweets!'))
+                }}
+              >
+                <i className="far fa-comment fa-lg"></i>
+              </button>
+              <span className="tweet-buttons-count">
+                {tweet.commentCount ? tweet.commentCount : ''}
+              </span>
+            </div>
+            <div className="tweet-buttons-item">
+              <button
+                className={
+                  'tweet-buttons-like' + (touched ? ' like-touched' : '')
                 }
-              }}
-            >
-              <i className={'fa-heart fa-lg' + (touched ? ' fas' : ' far')}></i>
-            </button>
+                onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation()
+                  if (user) {
+                    if (!touched) {
+                      setTouched(true)
+                      setLikes(likes + 1)
+                      await likeTweet({ variables: { id: Number(tweet.id) } })
+                    } else {
+                      setTouched(false)
+                      setLikes(likes - 1 >= 0 ? likes - 1 : 0)
+                      await unlikeTweet({ variables: { id: Number(tweet.id) } })
+                    }
+                  } else {
+                    dispatch(setError('Must be authorized to like tweets!'))
+                  }
+                }}
+              >
+                <i
+                  className={'fa-heart fa-lg' + (touched ? ' fas' : ' far')}
+                ></i>
+              </button>
+              <span className="tweet-buttons-count">{likes ? likes : 0}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -151,7 +156,6 @@ export const Tweet = ({ tweet, user, likedTweets }: Props) => {
             .map((comment) => (
               <Tweet
                 tweet={comment}
-                user={user}
                 likedTweets={likedTweets}
                 key={comment.id}
               />
