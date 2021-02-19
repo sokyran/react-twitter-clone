@@ -1,13 +1,13 @@
-import { AppThunk } from '../../utils/types'
-import {
-  CLOSE_COMMENT_MODAL,
-  CommentPayload,
-  SHOW_COMMENT_MODAL,
-} from './types'
+import { AppThunk, ITweet } from '../../utils/types'
+import { CLOSE_COMMENT_MODAL, SHOW_COMMENT_MODAL } from './types'
 
-export const openCommentModal = (payload: CommentPayload): AppThunk => {
+export const openCommentModal = (originalTweet: ITweet): AppThunk => {
   return async (dispatch, getState) => {
-    dispatch({ type: SHOW_COMMENT_MODAL, payload })
+    const { user } = getState()
+    dispatch({
+      type: SHOW_COMMENT_MODAL,
+      payload: { originalTweet, respondent: user },
+    })
   }
 }
 
