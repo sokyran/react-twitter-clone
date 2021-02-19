@@ -6,6 +6,7 @@ import { closeCommentModal } from '../../store/comment/actions'
 import { setError } from '../../store/error/actions'
 import { CREATE_COMMENT } from '../../utils/queries'
 import { ResizableInput } from '../ResizableInput'
+import moment from 'moment'
 import './comment-modal-styles.scss'
 
 export const CommentModal = () => {
@@ -40,8 +41,6 @@ export const CommentModal = () => {
           <i
             className="fas fa-lg fa-times back-button"
             onClick={() => {
-              // refContainer.current.classList.toggle('squeeze')
-              // setTimeout(() => dispatch(closeCommentModal()), 1000)
               dispatch(closeCommentModal())
             }}
           ></i>
@@ -74,7 +73,9 @@ export const CommentModal = () => {
           <div className="comment-modal-info">
             <span className="username">{originalTweet?.user.username}</span>
             <span className="usertag">{originalTweet?.user.usertag}</span>
-            <span className="date">{originalTweet?.date}</span>
+            <span className="date">
+              {moment(originalTweet?.date).format('HH:mm MMMM DD YYYY')}
+            </span>
             <div className="text">{originalTweet?.text}</div>
           </div>
         </div>

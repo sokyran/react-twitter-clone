@@ -24,9 +24,8 @@ export const BigTweet = ({ tweet }: Props) => {
         <span>{moment(tweet.date).format('MMMM DD YYYY')}</span>
       </div>
       <div className="tweet-details-stats">
-        <span className="tweet-details-stats-likes" data-count={tweet.likes}>
-          likes
-        </span>
+        <span className="tweet-details-stats-likes">{tweet.likes}</span>
+        <span>likes</span>
       </div>
       <div className="tweet-details-buttons"></div>
     </div>

@@ -56,6 +56,7 @@ export const GET_TWEETS = gql`
       userId
       likes
       imageUrl
+      commentCount
       user {
         username
         usertag
