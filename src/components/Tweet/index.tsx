@@ -1,22 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { openCommentModal } from '../../redux/comment/actions'
-import { LIKE_TWEET, SHOW_LIKES, UNLIKE_TWEET } from '../../utils/queries'
-import { setError } from '../../redux/error/actions'
-import { ITweet } from '../../utils/types'
-import { useHistory } from 'react-router-dom'
-import { useMutation } from '@apollo/client'
+import { useLikeTweet } from '../../hooks/useLikeTweet'
 import { useDispatch, useSelector } from 'react-redux'
+import { setError } from '../../redux/error/actions'
+import { useHistory } from 'react-router-dom'
+import { ITweet } from '../../utils/types'
+import { RootState } from '../../redux'
 import moment from 'moment'
 import './tweet-styles.scss'
-import { RootState } from '../../redux'
 
 interface Props {
   tweet: ITweet
   likedTweets: number[] | null
-}
-
-interface ICache {
-  showLikes: number[]
 }
 
 export const Tweet = ({ tweet, likedTweets }: Props) => {
@@ -26,60 +21,16 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const [likes, setLikes] = useState(tweet.likes)
-  const [touched, setTouched] = useState<Boolean>(
+  const initTouched =
     likedTweets && likedTweets.length > 0
       ? likedTweets.includes(Number(tweet.id))
       : false
+
+  const { likes, touched, likeTweet, unlikeTweet } = useLikeTweet(
+    tweet.likes,
+    initTouched,
+    tweet.id
   )
-
-  const [likeTweet] = useMutation(LIKE_TWEET, {
-    onError: (err) => {
-      console.log(err)
-      dispatch(setError(err.message))
-    },
-    update: (cache, { data }) => {
-      const existingLikes: ICache | null = cache.readQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-      })
-      if (existingLikes) {
-        cache.writeQuery({
-          query: SHOW_LIKES,
-          variables: { id: user?.id },
-          data: {
-            showLikes: [...existingLikes.showLikes, Number(data.likeTweet.id)],
-          },
-        })
-      }
-    },
-  })
-
-  const [unlikeTweet] = useMutation(UNLIKE_TWEET, {
-    onError: (err) => {
-      console.log(err)
-      dispatch(setError(err.message))
-    },
-    update: (cache, { data }) => {
-      const existingLikes: ICache | null = cache.readQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-      })
-      if (existingLikes) {
-        cache.writeQuery({
-          query: SHOW_LIKES,
-          variables: { id: user?.id },
-          data: {
-            showLikes: [
-              ...existingLikes.showLikes.filter(
-                (id) => id !== Number(data.unlikeTweet.id)
-              ),
-            ],
-          },
-        })
-      }
-    },
-  })
 
   return (
     <>
@@ -134,13 +85,9 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
                   e.stopPropagation()
                   if (user) {
                     if (!touched) {
-                      setTouched(true)
-                      setLikes(likes + 1)
-                      await likeTweet({ variables: { id: Number(tweet.id) } })
+                      await likeTweet()
                     } else {
-                      setTouched(false)
-                      setLikes(likes - 1 >= 0 ? likes - 1 : 0)
-                      await unlikeTweet({ variables: { id: Number(tweet.id) } })
+                      await unlikeTweet()
                     }
                   } else {
                     dispatch(setError('Must be authorized to like tweets!'))
