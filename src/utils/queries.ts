@@ -72,6 +72,7 @@ export const GET_TWEET_BY_ID = gql`
       text
       date
       id
+      commentCount
       likes
       user {
         username

@@ -39,9 +39,9 @@ export const TweetDetails = () => {
     const { tweet } = data
     const { comments } = tweet
     if (comments) {
-      // It changes original object, so i dont need to save it as variable
-      const temp = constructTree(tweet)
-      console.log(temp)
+      // It changes original object,
+      // so i dont need to save it as variable
+      constructTree(tweet)
     }
 
     if (!tweet.comments) {

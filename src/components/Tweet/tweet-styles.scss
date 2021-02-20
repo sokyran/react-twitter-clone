@@ -29,9 +29,12 @@
   font-weight: 400;
   display: grid;
   grid-template-columns: 60px minmax(0, 1fr);
-
   min-height: 0;
   min-width: 0;
+
+  // &:hover {
+  //   background-color: rgba(67, 140, 235, 0.04);
+  // }
 
   // box-shadow: 0 1px 10px #0076ff3b;
   // box-shadow: 3px 3px 0px 1px #003c80c7;
@@ -40,11 +43,8 @@
     padding-top: 10px;
   }
 
-  &:hover {
-    background-color: rgba(67, 140, 235, 0.04);
-  }
-
   &-avatar-replies-container {
+    grid-row: 1 / 3;
     width: fit-content;
     display: flex;
     flex-direction: column;
@@ -55,15 +55,19 @@
   &-line {
     margin-bottom: 5px;
     height: calc(100% - 60px);
-    width: 3px;
+    width: 0.1rem;
     border-radius: 20px;
-    background: #c0c0c0;
+    background: #e0e0e0;
+
+    &:hover {
+      background-color: #585858;
+    }
   }
 
   &-avatar {
     max-width: 100%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
     background-size: cover;
     background-position: center center;
@@ -164,6 +168,14 @@
     &-comment i {
       position: relative;
       left: 1px;
+    }
+  }
+
+  &-comment-section {
+    width: 100%;
+
+    .tweet {
+      padding: 0;
     }
   }
 }

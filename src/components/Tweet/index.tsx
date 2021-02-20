@@ -40,7 +40,7 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
             className="tweet-avatar"
             style={{ backgroundImage: `url(${tweet.user.avatar})` }}
           />
-          <span className="tweet-line"></span>
+          {tweet.comments ? <span className="tweet-line"></span> : null}
         </div>
         <div>
           <div className="tweet-user-info">
@@ -102,18 +102,20 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
             </div>
           </div>
         </div>
+        <div className="tweet-comment-section">
+          {comments && comments.length > 0
+            ? comments
+                .sort((a, b) => moment(a.date).unix() - moment(b.date).unix())
+                .map((comment) => (
+                  <Tweet
+                    tweet={comment}
+                    likedTweets={likedTweets}
+                    key={comment.id}
+                  />
+                ))
+            : null}
+        </div>
       </div>
-      {comments && comments.length > 0
-        ? comments
-            .sort((a, b) => moment(a.date).unix() - moment(b.date).unix())
-            .map((comment) => (
-              <Tweet
-                tweet={comment}
-                likedTweets={likedTweets}
-                key={comment.id}
-              />
-            ))
-        : null}
     </>
   )
 }

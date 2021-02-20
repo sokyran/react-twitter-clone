@@ -5,21 +5,19 @@ export const constructTree = (tweet: ITweet) => {
   delete tweet.comments
   let objs = [tweet, ...(comments || [])]
 
-  let idMapping = objs.reduce((acc: any, el, i) => {
-    acc[el.id] = i
+  let idMapping = objs.reduce((acc: any, elem, idx) => {
+    acc[elem.id] = idx
     return acc
   }, {})
 
   let root
-  objs.forEach((el) => {
-    if (!el.inResponseTo) {
-      root = el
+  objs.forEach((elem) => {
+    if (!elem.inResponseTo) {
+      root = elem
       return
     }
-    const parentEl = objs[idMapping[el.inResponseTo]]
-    if (parentEl) {
-      parentEl.comments = [...(parentEl.comments || []), el]
-    }
+    const parentEl = objs[idMapping[elem.inResponseTo]]
+    parentEl.comments = [...(parentEl.comments || []), elem]
   })
 
   return root
