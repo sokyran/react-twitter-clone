@@ -72,8 +72,11 @@
     &-image {
       width: 35px;
       height: 35px;
-      border-radius: 50px;
-      border: 1px solid #00000052;
+      border-radius: 10px;
+      max-width: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
     }
 
     &-item {

@@ -20,15 +20,19 @@ interface ICache {
 }
 
 export const Tweet = ({ tweet, likedTweets }: Props) => {
+  const { user } = useSelector((state: RootState) => state)
+  const { comments } = tweet
+
   const dispatch = useDispatch()
   const history = useHistory()
-  const { user } = useSelector((state: RootState) => state)
+
   const [likes, setLikes] = useState(tweet.likes)
   const [touched, setTouched] = useState<Boolean>(
     likedTweets && likedTweets.length > 0
       ? likedTweets.includes(Number(tweet.id))
       : false
   )
+
   const [likeTweet] = useMutation(LIKE_TWEET, {
     onError: (err) => {
       console.log(err)
@@ -50,6 +54,7 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
       }
     },
   })
+
   const [unlikeTweet] = useMutation(UNLIKE_TWEET, {
     onError: (err) => {
       console.log(err)
@@ -76,13 +81,14 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
     },
   })
 
-  const { comments } = tweet
-
   return (
     <>
       <div className="tweet" onClick={() => history.push(`/tweet/${tweet.id}`)}>
         <div className="tweet-avatar-replies-container">
-          <img className="tweet-avatar" src={tweet.user.avatar} alt="Profile" />
+          <div
+            className="tweet-avatar"
+            style={{ backgroundImage: `url(${tweet.user.avatar})` }}
+          />
           <span className="tweet-line"></span>
         </div>
         <div>

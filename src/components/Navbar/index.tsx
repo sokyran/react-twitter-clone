@@ -32,7 +32,10 @@ export const Navbar = () => {
   )
 
   const dropdownButton = (
-    <img className="navbar-dropdown-image" src={user?.avatar} alt="Profile" />
+    <div
+      className="navbar-dropdown-image"
+      style={{ backgroundImage: `url(${user?.avatar}` }}
+    ></div>
   )
 
   return (
