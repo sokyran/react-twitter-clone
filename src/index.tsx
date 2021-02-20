@@ -9,7 +9,7 @@ import {
   InMemoryCache,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { store } from './store'
+import { store } from './redux'
 import { Provider } from 'react-redux'
 
 const httpLink = createHttpLink({

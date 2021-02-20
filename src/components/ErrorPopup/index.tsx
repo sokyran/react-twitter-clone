@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { RootState } from '../../redux'
 import './error-styles.scss'
 
 export const ErrorPopup = () => {

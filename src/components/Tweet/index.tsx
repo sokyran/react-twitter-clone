@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { openCommentModal } from '../../store/comment/actions'
+import { openCommentModal } from '../../redux/comment/actions'
 import { LIKE_TWEET, SHOW_LIKES, UNLIKE_TWEET } from '../../utils/queries'
-import { setError } from '../../store/error/actions'
+import { setError } from '../../redux/error/actions'
 import { ITweet } from '../../utils/types'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import './tweet-styles.scss'
-import { RootState } from '../../store'
+import { RootState } from '../../redux'
 
 interface Props {
   tweet: ITweet

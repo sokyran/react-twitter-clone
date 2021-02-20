@@ -2,7 +2,7 @@ import React from 'react'
 import { DropdownMenu } from '../DropdownMenu'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { RootState } from '../../redux'
 import './navbar-styles.scss'
 
 export const Navbar = () => {

@@ -1,5 +1,5 @@
 import { Action, ThunkAction } from '@reduxjs/toolkit'
-import { RootState } from '../store'
+import { RootState } from '../redux'
 
 export interface ITweet {
   id: number

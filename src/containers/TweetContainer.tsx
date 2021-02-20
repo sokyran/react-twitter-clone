@@ -1,13 +1,13 @@
 import { GET_TWEETS, SHOW_LIKES } from '../utils/queries'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTweets } from '../store/tweets/actions'
+import { setTweets } from '../redux/tweets/actions'
 import { ClassicSpinner } from 'react-spinners-kit'
-import { setError } from '../store/error/actions'
+import { setError } from '../redux/error/actions'
 import { Tweet } from '../components/Tweet'
 import { useQuery } from '@apollo/client'
 import React, { useEffect } from 'react'
 import { ITweet } from '../utils/types'
-import { RootState } from '../store'
+import { RootState } from '../redux'
 import './tweet-container-styles.scss'
 
 export const TweetContainer = () => {
