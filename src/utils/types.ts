@@ -9,6 +9,7 @@ export interface ITweet {
   likes: number
   imageUrl?: string
   commentCount?: number
+  inResponseTo?: number
   comments?: ITweet[]
 }
 

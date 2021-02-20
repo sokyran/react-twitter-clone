@@ -10,6 +10,7 @@ import { RootState } from '../../redux'
 import { Tweet } from '../Tweet'
 import './tweet-details-styles.scss'
 import { BigTweet } from './BigTweet'
+import { constructTree } from '../../utils/constructTree'
 
 interface ParamTypes {
   id: string
@@ -33,8 +34,19 @@ export const TweetDetails = () => {
   if (error) {
     dispatch(setError(error.message))
   }
+
   if (data && likedData) {
     const { tweet } = data
+    const { comments } = tweet
+    if (comments) {
+      // It changes original object, so i dont need to save it as variable
+      const temp = constructTree(tweet)
+      console.log(temp)
+    }
+
+    if (!tweet.comments) {
+      tweet.comments = []
+    }
 
     return (
       <div className="container">

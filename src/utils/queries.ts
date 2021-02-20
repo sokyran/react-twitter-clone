@@ -83,6 +83,7 @@ export const GET_TWEET_BY_ID = gql`
         text
         date
         likes
+        inResponseTo
         user {
           username
           usertag
@@ -90,14 +91,6 @@ export const GET_TWEET_BY_ID = gql`
         }
         comments {
           id
-          text
-          date
-          likes
-          user {
-            username
-            usertag
-            avatar
-          }
         }
       }
     }

@@ -26,6 +26,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Trigger only child onClick, not parent (https://stackoverflow.com/questions/39470071/onclick-of-both-child-and-parent-triggered-when-child-is-clicked)
 
+- JS Copying mechanism, deep and shalow copy (https://stackoverflow.com/questions/28150967/typescript-cloning-object)
+
 # TODO
 
 ## Features to add
