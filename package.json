@@ -54,5 +54,6 @@
   "devDependencies": {
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7"
-  }
+  },
+  "proxy": "http://192.168.0.104:3001"
 }
