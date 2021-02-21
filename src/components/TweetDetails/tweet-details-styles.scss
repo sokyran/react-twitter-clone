@@ -38,7 +38,7 @@
 
   &-avatar {
     width: 50px;
-    border-radius: 50px;
+    border-radius: 10px;
   }
 
   &-user {
@@ -147,5 +147,11 @@
   &-header {
     font-family: $font-family;
     margin: 5px;
+  }
+}
+
+.comments {
+  .tweet-line {
+    display: flex;
   }
 }

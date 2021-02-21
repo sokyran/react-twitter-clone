@@ -1,12 +1,17 @@
 @import './utils/globals.scss';
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body,
 #root {
   scroll-behavior: smooth;
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 body {
@@ -17,12 +22,6 @@ body {
   html {
     font-size: 14px;
   }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
 }
 
 #root {
@@ -72,4 +71,12 @@ body {
   border-radius: 10px;
   margin: 10px auto;
   padding: 0;
+
+  &:hover {
+    background-color: #438ceb0a;
+  }
+
+  &:last-child {
+    margin-bottom: 20px;
+  }
 }
