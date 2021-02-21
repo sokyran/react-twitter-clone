@@ -1,17 +1,44 @@
-import { useMutation } from '@apollo/client/react'
 import React, { useEffect, useRef, useState } from 'react'
+import { useMutation } from '@apollo/client/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
 import { closeCommentModal } from '../../redux/comment/actions'
 import { setError } from '../../redux/error/actions'
-import { CREATE_COMMENT } from '../../utils/queries'
+import { CREATE_COMMENT, GET_TWEET_BY_ID } from '../../utils/queries'
 import { ResizableInput } from '../ResizableInput'
+import { ITweet } from '../../utils/types'
 import moment from 'moment'
 import './comment-modal-styles.scss'
 
+interface ICache {
+  tweet: ITweet
+}
+
 export const CommentModal = () => {
   const dispatch = useDispatch()
-  const [createComment] = useMutation(CREATE_COMMENT)
+  const [createComment] = useMutation(CREATE_COMMENT, {
+    update: (cache, { data }) => {
+      const tweetAndComments: ICache | null = cache.readQuery({
+        query: GET_TWEET_BY_ID,
+        variables: { id: Number(data.createComment.conversationId) },
+      })
+      if (tweetAndComments) {
+        cache.writeQuery({
+          query: GET_TWEET_BY_ID,
+          variables: { id: Number(data.createComment.conversationId) },
+          data: {
+            tweet: {
+              ...tweetAndComments.tweet,
+              comments: [
+                ...(tweetAndComments.tweet.comments || []),
+                data.createComment,
+              ],
+            },
+          },
+        })
+      }
+    },
+  })
 
   const [commentText, setCommentText] = useState('')
   const refContainer = useRef<HTMLDivElement>({} as HTMLDivElement)

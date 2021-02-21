@@ -130,6 +130,14 @@ export const CREATE_COMMENT = gql`
       id
       text
       date
+      likes
+      inResponseTo
+      conversationId
+      user {
+        username
+        usertag
+        avatar
+      }
     }
   }
 `

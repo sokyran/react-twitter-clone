@@ -23,7 +23,7 @@ export const TweetDetails = () => {
 
   const { data, error } = useQuery(GET_TWEET_BY_ID, {
     variables: { id: Number(id) },
-    fetchPolicy: 'no-cache',
+    // fetchPolicy: 'no-cache',
   })
 
   const { data: likedData } = useQuery(SHOW_LIKES, {
@@ -38,14 +38,9 @@ export const TweetDetails = () => {
   if (data && likedData) {
     const { tweet } = data
     const { comments } = tweet
+    let newTweets: any
     if (comments) {
-      // It changes original object,
-      // so i dont need to save it as variable
-      constructTree(tweet)
-    }
-
-    if (!tweet.comments) {
-      tweet.comments = []
+      newTweets = constructTree(JSON.parse(JSON.stringify(tweet)))
     }
 
     return (
@@ -54,11 +49,13 @@ export const TweetDetails = () => {
           <BigTweet tweet={tweet} />
         </div>
         <h1 className="tweet-details-header">Comments</h1>
-        {tweet.comments.map((comment: ITweet) => (
-          <div className="tweet-wrapper" key={comment.id}>
-            <Tweet tweet={comment} likedTweets={likedData.showLikes} />
-          </div>
-        ))}
+        {newTweets && newTweets.comments
+          ? newTweets.comments.map((comment: ITweet) => (
+              <div className="tweet-wrapper comments" key={comment.id}>
+                <Tweet tweet={comment} likedTweets={likedData.showLikes} />
+              </div>
+            ))
+          : null}
       </div>
     )
   }
