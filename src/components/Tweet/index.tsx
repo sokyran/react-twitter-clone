@@ -3,7 +3,6 @@ import { openCommentModal } from '../../redux/comment/actions'
 import { useLikeTweet } from '../../hooks/useLikeTweet'
 import { useDispatch, useSelector } from 'react-redux'
 import { setError } from '../../redux/error/actions'
-import { useHistory } from 'react-router-dom'
 import { ITweet } from '../../utils/types'
 import { RootState } from '../../redux'
 import moment from 'moment'
@@ -19,7 +18,6 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
   const { comments } = tweet
 
   const dispatch = useDispatch()
-  const history = useHistory()
 
   const initTouched =
     likedTweets && likedTweets.length > 0
@@ -34,13 +32,15 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
 
   return (
     <>
-      <div className="tweet" onClick={() => history.push(`/tweet/${tweet.id}`)}>
+      <div className="tweet">
         <div className="tweet-avatar-replies-container">
           <div
             className="tweet-avatar"
             style={{ backgroundImage: `url(${tweet.user.avatar})` }}
           />
-          {tweet.comments ? <span className="tweet-line"></span> : null}
+          <div className="tweet-line">
+            <span className="tweet-line-item"></span>
+          </div>
         </div>
         <div>
           <div className="tweet-user-info">

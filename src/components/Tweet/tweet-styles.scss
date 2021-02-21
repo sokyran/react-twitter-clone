@@ -23,18 +23,14 @@
 
 .tweet {
   padding: 0 10px;
-  animation: appearance 1s ease-in-out;
+  animation: appearance 0.5s ease-in-out;
   width: 100%;
   font-family: $font-family;
   font-weight: 400;
   display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr);
   min-height: 0;
   min-width: 0;
-
-  // &:hover {
-  //   background-color: rgba(67, 140, 235, 0.04);
-  // }
 
   // box-shadow: 0 1px 10px #0076ff3b;
   // box-shadow: 3px 3px 0px 1px #003c80c7;
@@ -53,14 +49,23 @@
   }
 
   &-line {
-    margin-bottom: 5px;
-    height: calc(100% - 60px);
-    width: 0.1rem;
-    border-radius: 20px;
-    background: #e0e0e0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    height: calc(100% - 55px);
+    width: 100%;
 
-    &:hover {
+    &:hover > &-item {
       background-color: #585858;
+    }
+
+    &-item {
+      display: block;
+      height: 100%;
+      width: 0.1rem;
+      border-radius: 20px;
+      background: #e0e0e0;
     }
   }
 
