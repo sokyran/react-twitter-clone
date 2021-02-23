@@ -1,4 +1,4 @@
-import { GET_TWEETS, SHOW_LIKES } from '../utils/queries'
+import { GET_TWEETS } from '../utils/queries'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTweets } from '../redux/tweets/actions'
 import { ClassicSpinner } from 'react-spinners-kit'
@@ -22,10 +22,6 @@ export const TweetContainer = () => {
     },
   })
 
-  const { loading: likedLoading, data: likedData } = useQuery(SHOW_LIKES, {
-    variables: { id: user ? user.id : null },
-  })
-
   useEffect(() => {
     if (tweetsData && tweetsData.tweets) {
       dispatch(setTweets(tweetsData.tweets))
@@ -33,7 +29,9 @@ export const TweetContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tweetsData])
 
-  if (tweetsLoading || likedLoading) {
+  const likedTweets = user ? user.likedTweets : []
+
+  if (tweetsLoading) {
     return (
       <div className="tweet-loader">
         <p className="tweet-loader-text">Tweets are loading...</p>
@@ -50,7 +48,7 @@ export const TweetContainer = () => {
           className="tweet-wrapper"
           onClick={() => history.push(`/tweet/${tweet.id}`)}
         >
-          <Tweet tweet={tweet} likedTweets={likedData.showLikes} />
+          <Tweet tweet={tweet} likedTweets={likedTweets} />
         </div>
       ))}
     </div>

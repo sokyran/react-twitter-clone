@@ -18,6 +18,7 @@ export interface IUser {
   username: string
   usertag: string
   avatar: string
+  likedTweets: number[]
   accessToken?: string
 }
 

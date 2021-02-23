@@ -7,12 +7,13 @@ import { ErrorPopup } from './components/ErrorPopup'
 import { TweetInput } from './components/TweetInput'
 import { SIGN_IN, SIGN_UP } from './utils/queries'
 import { LoginPage } from './components/LoginPage'
-import { setUser } from './redux/user/actions'
+import { initUser, setUser } from './redux/user/actions'
 import { Navbar } from './components/Navbar'
 import { useMutation } from '@apollo/client'
 import { RootState } from './redux'
 import { TweetDetails } from './components/TweetDetails'
 import { Profile } from './components/Profile'
+import { ProfileDetails } from './components/ProfileDetails'
 
 function App() {
   const user = useSelector((state: RootState) => state.user)
@@ -22,8 +23,14 @@ function App() {
   const [signUpUser] = useMutation(SIGN_UP)
 
   useEffect(() => {
+    dispatch(initUser())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (loginResult.data) {
       const result = loginResult.data.signIn
+      localStorage.setItem('accessToken', loginResult.data.signIn.accessToken)
       dispatch(setUser(result))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,6 +76,9 @@ function App() {
             </Route>
             <Route path="/tweet/:id">
               <TweetDetails />
+            </Route>
+            <Route path="/user/:profile">
+              <ProfileDetails />
             </Route>
             <Route path="/profile">
               <Profile />

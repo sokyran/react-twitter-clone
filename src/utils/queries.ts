@@ -98,7 +98,7 @@ export const GET_TWEET_BY_ID = gql`
   }
 `
 
-export const LIKE_TWEET = gql`
+export const LIKE_TWEET_QUERY = gql`
   mutation likeTweet($id: Int!) {
     likeTweet(id: $id) {
       likes
@@ -107,18 +107,12 @@ export const LIKE_TWEET = gql`
   }
 `
 
-export const UNLIKE_TWEET = gql`
+export const UNLIKE_TWEET_QUERY = gql`
   mutation unlikeTweet($id: Int!) {
     unlikeTweet(id: $id) {
       likes
       id
     }
-  }
-`
-
-export const SHOW_LIKES = gql`
-  query showLikes($id: Int) {
-    showLikes(id: $id)
   }
 `
 

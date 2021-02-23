@@ -6,14 +6,3 @@ export const setTweets = (tweets: ITweet[]): AppThunk => {
     dispatch({ type: SET_TWEETS, payload: tweets })
   }
 }
-
-// export const likeTweet = (id: number): AppThunk => {
-//   return async (dispatch, getState) => {
-//     const user = getState().user
-//     if (user) {
-//       user.likedTweets = user.likedTweets.concat(id)
-//       dispatch(setUser(user))
-//     }
-
-//   }
-// }

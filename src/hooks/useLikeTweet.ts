@@ -1,82 +1,46 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux'
-import { setError } from '../redux/error/actions'
-import { LIKE_TWEET, SHOW_LIKES, UNLIKE_TWEET } from '../utils/queries'
+import { useDispatch } from 'react-redux'
 
-interface ICache {
-  showLikes: number[]
-}
+import { setError } from '../redux/error/actions'
+import { LikeTweet, UnlikeTweet } from '../redux/user/actions'
+import { LIKE_TWEET_QUERY, UNLIKE_TWEET_QUERY } from '../utils/queries'
 
 export const useLikeTweet = (
   initLikes: number,
   initTouched: boolean,
-  tweetId: Number
+  tweetId: number
 ) => {
   const dispatch = useDispatch()
-  const { user } = useSelector((state: RootState) => state)
 
   const [likes, setLikes] = useState(initLikes)
   const [touched, setTouched] = useState<Boolean>(initTouched)
 
-  const [likeTweetMutation] = useMutation(LIKE_TWEET, {
+  const [likeTweetMutation] = useMutation(LIKE_TWEET_QUERY, {
     onError: (err) => {
       console.log(err)
       dispatch(setError(err.message))
-    },
-    update: (cache, { data }) => {
-      const existingLikes: ICache | null = cache.readQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-      })
-      if (existingLikes) {
-        cache.writeQuery({
-          query: SHOW_LIKES,
-          variables: { id: user?.id },
-          data: {
-            showLikes: [...existingLikes.showLikes, Number(data.likeTweet.id)],
-          },
-        })
-      }
     },
   })
 
-  const [unlikeTweetMutation] = useMutation(UNLIKE_TWEET, {
+  const [unlikeTweetMutation] = useMutation(UNLIKE_TWEET_QUERY, {
     onError: (err) => {
       console.log(err)
       dispatch(setError(err.message))
-    },
-    update: (cache, { data }) => {
-      const existingLikes: ICache | null = cache.readQuery({
-        query: SHOW_LIKES,
-        variables: { id: user?.id },
-      })
-      if (existingLikes) {
-        cache.writeQuery({
-          query: SHOW_LIKES,
-          variables: { id: user?.id },
-          data: {
-            showLikes: [
-              ...existingLikes.showLikes.filter(
-                (id) => id !== Number(data.unlikeTweet.id)
-              ),
-            ],
-          },
-        })
-      }
     },
   })
 
   const likeTweet = async () => {
     setTouched(true)
     setLikes(likes + 1)
+    dispatch(LikeTweet(tweetId))
     await likeTweetMutation({ variables: { id: Number(tweetId) } })
   }
 
   const unlikeTweet = async () => {
     setTouched(false)
     setLikes(likes - 1 >= 0 ? likes - 1 : 0)
+    dispatch(UnlikeTweet(tweetId))
     await unlikeTweetMutation({ variables: { id: Number(tweetId) } })
   }
 

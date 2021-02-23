@@ -22,7 +22,7 @@ export const Navbar = () => {
       <button
         className="navbar-dropdown-item"
         onClick={() => {
-          localStorage.removeItem('user')
+          localStorage.removeItem('accessToken')
           window.location.reload()
         }}
       >
@@ -31,12 +31,13 @@ export const Navbar = () => {
     </>
   )
 
-  const dropdownButton = (
-    <div
-      className="navbar-dropdown-image"
-      style={{ backgroundImage: `url(${user?.avatar}` }}
-    ></div>
-  )
+  const dropdownButton =
+    user && user.id ? (
+      <div
+        className="navbar-dropdown-image"
+        style={{ backgroundImage: `url(${user.avatar}` }}
+      ></div>
+    ) : null
 
   return (
     <div className="navbar">

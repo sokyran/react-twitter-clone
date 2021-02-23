@@ -31,7 +31,11 @@ export const Profile = () => {
     actions: FormikHelpers<FormProps>
   ) => {
     try {
-      const updatedUser = { id: user.id, ...values }
+      const updatedUser = {
+        id: user.id,
+        likedTweets: user.likedTweets,
+        ...values,
+      }
       await updateUser({ variables: updatedUser })
       dispatch(setUser(updatedUser))
       history.push('/')
