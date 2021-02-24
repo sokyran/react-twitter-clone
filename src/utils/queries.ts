@@ -8,6 +8,7 @@ export const SIGN_IN = gql`
       usertag
       avatar
       id
+      likedTweets
     }
   }
 `

@@ -9,16 +9,24 @@ export const initUser = (): AppThunk => {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       }
-      const res = await axios.get('http://192.168.0.104:3001/user', config)
-      dispatch({ type: SET_USER, payload: res.data })
+      try {
+        const res = await axios.get('http://192.168.0.104:3001/user', config)
+        dispatch({ type: SET_USER, payload: res.data })
+      } catch (err) {
+        console.log(err)
+        dispatch({ type: SET_USER, payload: null })
+      }
     }
   }
 }
 
-export const setUser = (user: IUser): AppThunk => {
+export const setUser = (user: IUser | null): AppThunk => {
   return async (dispatch, getState) => {
-    const userToSave = { ...user, id: Number(user.id) }
-    dispatch({ type: SET_USER, payload: userToSave })
+    if (user) {
+      const userToSave = { ...user, id: Number(user.id) }
+      return dispatch({ type: SET_USER, payload: userToSave })
+    }
+    dispatch({ type: SET_USER, payload: null })
   }
 }
 

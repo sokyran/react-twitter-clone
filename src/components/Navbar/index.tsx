@@ -1,13 +1,15 @@
 import React from 'react'
 import { DropdownMenu } from '../DropdownMenu'
 import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
 import './navbar-styles.scss'
+import { setUser } from '../../redux/user/actions'
 
 export const Navbar = () => {
-  const user = useSelector((state: RootState) => state.user)
+  const dispatch = useDispatch()
   const history = useHistory()
+  const user = useSelector((state: RootState) => state.user)
 
   const dropdownContent = (
     <>
@@ -23,7 +25,7 @@ export const Navbar = () => {
         className="navbar-dropdown-item"
         onClick={() => {
           localStorage.removeItem('accessToken')
-          window.location.reload()
+          dispatch(setUser(null))
         }}
       >
         Sign out
@@ -45,7 +47,7 @@ export const Navbar = () => {
         <p className="navbar-logo" onClick={() => history.push('/')}>
           Twottor
         </p>
-        {user ? (
+        {user && user.id ? (
           <div className="navbar-dropdown">
             <DropdownMenu
               dropdownContent={dropdownContent}
