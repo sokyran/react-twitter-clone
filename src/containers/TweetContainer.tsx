@@ -1,7 +1,6 @@
 import { GET_TWEETS } from '../utils/queries'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTweets } from '../redux/tweets/actions'
-import { ClassicSpinner } from 'react-spinners-kit'
 import { setError } from '../redux/error/actions'
 import { useHistory } from 'react-router-dom'
 import { Tweet } from '../components/Tweet'
@@ -10,12 +9,13 @@ import React, { useEffect } from 'react'
 import { ITweet } from '../utils/types'
 import { RootState } from '../redux'
 import './tweet-container-styles.scss'
+import { MyLoader } from '../components/MyLoader'
 
 export const TweetContainer = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const { tweets, user } = useSelector((state: RootState) => state)
+  const { tweets } = useSelector((state: RootState) => state)
   const { loading: tweetsLoading, data: tweetsData } = useQuery(GET_TWEETS, {
     onError: (err) => {
       dispatch(setError(JSON.stringify(err)))
@@ -29,15 +29,8 @@ export const TweetContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tweetsData])
 
-  const likedTweets = user ? user.likedTweets : []
-
   if (tweetsLoading) {
-    return (
-      <div className="tweet-loader">
-        <p className="tweet-loader-text">Tweets are loading...</p>
-        <ClassicSpinner size={50} color="#00BFFF" loading={true} />
-      </div>
-    )
+    return <MyLoader />
   }
 
   return (
@@ -48,7 +41,7 @@ export const TweetContainer = () => {
           className="tweet-wrapper"
           onClick={() => history.push(`/tweet/${tweet.id}`)}
         >
-          <Tweet tweet={tweet} likedTweets={likedTweets} />
+          <Tweet tweet={tweet} />
         </div>
       ))}
     </div>

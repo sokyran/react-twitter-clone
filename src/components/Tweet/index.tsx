@@ -10,25 +10,21 @@ import './tweet-styles.scss'
 
 interface Props {
   tweet: ITweet
-  likedTweets: number[] | null
 }
 
-export const Tweet = ({ tweet, likedTweets }: Props) => {
-  const { user } = useSelector((state: RootState) => state)
-  const { comments } = tweet
-
+export const Tweet = ({ tweet }: Props) => {
   const dispatch = useDispatch()
 
-  const initTouched =
+  const { user } = useSelector((state: RootState) => state)
+  const { comments } = tweet
+  const likedTweets = user ? user.likedTweets : []
+
+  const touched =
     likedTweets && likedTweets.length > 0
       ? likedTweets.includes(Number(tweet.id))
       : false
 
-  const { likes, touched, likeTweet, unlikeTweet } = useLikeTweet(
-    tweet.likes,
-    initTouched,
-    tweet.id
-  )
+  const { likes, likeTweet, unlikeTweet } = useLikeTweet(tweet.likes, tweet.id)
 
   return (
     <>
@@ -106,13 +102,7 @@ export const Tweet = ({ tweet, likedTweets }: Props) => {
           {comments && comments.length > 0
             ? comments
                 .sort((a, b) => moment(a.date).unix() - moment(b.date).unix())
-                .map((comment) => (
-                  <Tweet
-                    tweet={comment}
-                    likedTweets={likedTweets}
-                    key={comment.id}
-                  />
-                ))
+                .map((comment) => <Tweet tweet={comment} key={comment.id} />)
             : null}
         </div>
       </div>

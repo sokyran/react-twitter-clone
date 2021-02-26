@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setError } from '../../redux/error/actions'
 import moment from 'moment'
 import { openCommentModal } from '../../redux/comment/actions'
+import { useHistory } from 'react-router-dom'
 
 interface Props {
   tweet: ITweet
@@ -13,12 +14,16 @@ interface Props {
 
 export const BigTweet = ({ tweet }: Props) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { user } = useSelector((state: RootState) => state)
-  const { likes, touched, likeTweet, unlikeTweet } = useLikeTweet(
-    tweet.likes,
-    false,
-    tweet.id
-  )
+  const likedTweets = user ? user.likedTweets : []
+
+  const touched =
+    likedTweets && likedTweets.length > 0
+      ? likedTweets.includes(Number(tweet.id))
+      : false
+
+  const { likes, likeTweet, unlikeTweet } = useLikeTweet(tweet.likes, tweet.id)
 
   return (
     <div className="tweet-details">
@@ -26,6 +31,7 @@ export const BigTweet = ({ tweet }: Props) => {
         src={tweet.user.avatar}
         alt=""
         className="tweet-details-avatar"
+        onClick={() => history.push(`/user/${tweet.user.usertag}`)}
       ></img>
       <div className="tweet-details-user">
         <div className="tweet-details-user-username">{tweet.user.username}</div>
