@@ -24,14 +24,9 @@ body {
   }
 }
 
-#root {
-  width: 100%;
-  height: 100%;
-}
-
 #forBlur {
   height: 100%;
-  transition: filter 0.1s linear;
+  transition: filter 0.2s ease-out;
 }
 
 body {

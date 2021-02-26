@@ -50,10 +50,8 @@ export const CommentModal = () => {
     let root = document.getElementById('forBlur')
     if (root && showModal) {
       root.style.filter = 'blur(2px)'
-      root.style.background = 'rgba(0,0,0, 0.9)'
     } else if (root) {
       root.style.filter = 'blur(0px)'
-      root.style.background = 'none'
     }
   }, [showModal])
 
