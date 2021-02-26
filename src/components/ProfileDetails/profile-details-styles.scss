@@ -48,7 +48,7 @@
   &-buttons {
     display: flex;
     justify-content: space-around;
-    padding: 10px 10px 0;
+    padding: 10px 0;
 
     button {
       background: none;
@@ -81,6 +81,24 @@
         border-color: $main-color;
         background: $main-color;
         color: #fff;
+      }
+    }
+
+    @media (max-width: 500px) {
+      & {
+        flex-wrap: wrap;
+      }
+
+      button {
+        border-radius: 10px;
+
+        &:first-child {
+          border-radius: 10px;
+        }
+
+        &:last-child {
+          border-radius: 10px;
+        }
       }
     }
   }

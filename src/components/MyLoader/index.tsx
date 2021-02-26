@@ -1,5 +1,6 @@
 import React from 'react'
 import { ClassicSpinner } from 'react-spinners-kit'
+import './loader-styles.scss'
 
 export const MyLoader = () => {
   return (
