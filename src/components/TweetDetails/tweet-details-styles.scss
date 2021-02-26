@@ -39,6 +39,12 @@
   &-avatar {
     width: 50px;
     border-radius: 10px;
+
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 4px 0.5px #dbdbdba4;
+    }
   }
 
   &-user {

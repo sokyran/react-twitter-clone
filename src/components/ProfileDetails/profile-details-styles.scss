@@ -1,1 +1,87 @@
 @import '../../utils/globals.scss';
+
+.profile {
+  margin-top: 10px;
+  padding: 10px;
+  border: 0.5px solid $border-color;
+  border-radius: 10px;
+
+  &-bg {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    position: relative;
+  }
+
+  &-avatar {
+    position: absolute;
+    border-radius: 10px;
+    width: 120px;
+    height: 120px;
+    bottom: -30%;
+    left: 5%;
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  &-username {
+    margin-top: 65px;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  &-usertag {
+    font-weight: 300;
+    font-size: 1.1rem;
+  }
+
+  &-biography {
+    padding: 10px 0;
+  }
+
+  &-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 10px 0;
+
+    button {
+      background: none;
+      outline: none;
+      border: none;
+
+      font-family: $font-family;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $main-color;
+
+      cursor: pointer;
+
+      width: 100%;
+      height: 40px;
+
+      border: 2px solid $border-color;
+
+      &:first-child {
+        margin-right: -1px;
+        border-radius: 10px 0 0 10px;
+      }
+
+      &:last-child {
+        margin-left: -1px;
+        border-radius: 0 10px 10px 0;
+      }
+
+      &.active {
+        border-color: $main-color;
+        background: $main-color;
+        color: #fff;
+      }
+    }
+  }
+}

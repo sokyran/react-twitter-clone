@@ -91,9 +91,30 @@ export const GET_TWEET_BY_ID = gql`
           usertag
           avatar
         }
-        comments {
-          id
-        }
+      }
+    }
+  }
+`
+
+export const GET_TWEETS_FOR_PROFILE = gql`
+  query tweetsByUser(
+    $usertag: String!
+    $withComments: Boolean
+    $loadLikes: Boolean
+  ) {
+    tweetsByUser(
+      usertag: $usertag
+      withComments: $withComments
+      loadLikes: $loadLikes
+    ) {
+      id
+      text
+      date
+      likes
+      user {
+        username
+        usertag
+        avatar
       }
     }
   }
@@ -153,6 +174,24 @@ export const UPDATE_USER = gql`
       }
     ) {
       id
+    }
+  }
+`
+
+export const GET_PROFILE = gql`
+  query getProfile($usertag: String!) {
+    profile(usertag: $usertag) {
+      id
+      avatar
+      username
+      usertag
+      profile {
+        usertag
+        registrationDate
+        biography
+        location
+        backgroundImage
+      }
     }
   }
 `
