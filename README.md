@@ -28,6 +28,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - JS Copying mechanism, deep and shalow copy (https://stackoverflow.com/questions/28150967/typescript-cloning-object)
 
+- Apollo Dependant queries (https://www.apollographql.com/blog/using-apollo-link-to-handle-dependent-queries-f9ed9f046886/)
+
 # TODO
 
 ## Features to add
@@ -38,6 +40,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [x] Add Redux
 - [x] Add Dataloaders
 - [x] Post a comment
-- [ ] Detailed tweet page
-- [ ] User profile tweets
+- [x] Detailed tweet page
+- [x] User profile tweets
 - [ ] Retweet
