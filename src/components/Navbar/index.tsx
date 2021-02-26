@@ -26,6 +26,7 @@ export const Navbar = () => {
         onClick={() => {
           localStorage.removeItem('accessToken')
           dispatch(setUser(null))
+          history.push('/')
         }}
       >
         Sign out

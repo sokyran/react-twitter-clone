@@ -15,6 +15,7 @@ export const initUser = (): AppThunk => {
       } catch (err) {
         console.log(err)
         dispatch({ type: SET_USER, payload: null })
+        localStorage.removeItem('accessToken')
       }
     }
   }
