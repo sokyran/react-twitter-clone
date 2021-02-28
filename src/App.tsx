@@ -12,7 +12,7 @@ import { Navbar } from './components/Navbar'
 import { useMutation } from '@apollo/client'
 import { RootState } from './redux'
 import { TweetDetails } from './components/TweetDetails'
-import { Profile } from './components/Profile'
+import { ProfileEdit } from './components/ProfileEdit'
 import { ProfileDetails } from './components/ProfileDetails'
 
 function App() {
@@ -81,7 +81,7 @@ function App() {
               <ProfileDetails />
             </Route>
             <Route path="/profile">
-              <Profile />
+              <ProfileEdit />
             </Route>
             <Route path="/">
               <div className="container">

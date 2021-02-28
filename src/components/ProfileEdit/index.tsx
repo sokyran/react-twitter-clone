@@ -9,6 +9,7 @@ import { UPDATE_USER } from '../../utils/queries'
 import { setUser } from '../../redux/user/actions'
 import { setError } from '../../redux/error/actions'
 import './profile-styles.scss'
+import { MyLoader } from '../MyLoader'
 
 interface FormProps {
   usertag: string
@@ -16,7 +17,7 @@ interface FormProps {
   avatar: string
 }
 
-export const Profile = () => {
+export const ProfileEdit = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const user = useSelector((state: RootState) => state.user)
@@ -76,6 +77,10 @@ export const Profile = () => {
     return errors
   }
 
+  if (!user.id) {
+    return <MyLoader />
+  }
+
   return (
     <div className="container">
       <Formik
@@ -93,9 +98,20 @@ export const Profile = () => {
               name="avatar"
               label="Avatar picture"
             />
+            <ProfileTextInput
+              id="backgroundImage"
+              name="backgroundImage"
+              label="Background Image"
+            />
+            <ProfileTextInput
+              id="biography"
+              name="biography"
+              label="Biography"
+              resizable={true}
+            />
 
             <input
-              disabled={formik.isSubmitting ? true : false}
+              disabled={formik.isSubmitting}
               className="profile-page-submit"
               type="submit"
               value={'Submit'}
