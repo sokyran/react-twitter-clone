@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 interface Props {
-  className: string
+  className?: string
   textValue: string
-  setTextValue: React.Dispatch<React.SetStateAction<string>>
+  setTextValue: React.Dispatch<React.SetStateAction<any>>
 }
 
 export const ResizableInput = ({

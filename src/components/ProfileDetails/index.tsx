@@ -1,7 +1,8 @@
 import { useLazyQuery, useQuery } from '@apollo/client'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
+import { RootState } from '../../redux'
 import { setError } from '../../redux/error/actions'
 import { GET_PROFILE, GET_TWEETS_FOR_PROFILE } from '../../utils/queries'
 import { ITweet } from '../../utils/types'
@@ -13,28 +14,55 @@ interface ParamTypes {
   profile: string
 }
 
+interface IProfile {
+  id: string
+  avatar: string
+  usertag: string
+  username: string
+  backgroundImage: string | null
+  biography: string | null
+  location: string | null
+  registrationDate: string
+}
+
 export const ProfileDetails = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
+  const { user } = useSelector((state: RootState) => state)
+  const [profile, setProfile] = useState<IProfile>()
   const [isActive, setIsActive] = useState<
     'Tweets' | 'Tweets and replies' | 'Likes'
   >('Tweets')
-  const { profile } = useParams<ParamTypes>()
-  const { data: profileData } = useQuery(GET_PROFILE, {
-    variables: { usertag: profile },
+
+  const { profile: profileString } = useParams<ParamTypes>()
+
+  useQuery(GET_PROFILE, {
+    onCompleted: (data) => {
+      const { avatar, id, username, usertag } = data.getProfile
+      const profileStuff = { ...data.getProfile.profile }
+      setProfile({
+        avatar,
+        id,
+        usertag,
+        username,
+        ...profileStuff,
+      })
+    },
+    variables: { usertag: profileString },
   })
 
   const { data: initData } = useQuery(GET_TWEETS_FOR_PROFILE, {
     onError: (err) => {
       dispatch(setError(err.message))
     },
-    variables: { usertag: profile },
+    variables: { usertag: profileString },
     fetchPolicy: 'no-cache',
   })
 
   const [getTweetsAndReplies, { data: repliesData }] = useLazyQuery(
     GET_TWEETS_FOR_PROFILE,
     {
-      variables: { usertag: profile, withComments: true },
+      variables: { usertag: profileString, withComments: true },
       fetchPolicy: 'no-cache',
     }
   )
@@ -42,7 +70,7 @@ export const ProfileDetails = () => {
   const [getLikedTweets, { data: likedData }] = useLazyQuery(
     GET_TWEETS_FOR_PROFILE,
     {
-      variables: { usertag: profile, loadLikes: true },
+      variables: { usertag: profileString, loadLikes: true },
       fetchPolicy: 'no-cache',
     }
   )
@@ -73,7 +101,7 @@ export const ProfileDetails = () => {
   }
 
   const bg = 'https://bureau.ru/var/files/img1532613761'
-  if (!profileData) {
+  if (!profile) {
     return <MyLoader />
   }
 
@@ -83,22 +111,37 @@ export const ProfileDetails = () => {
         <div className="profile-bg" style={{ backgroundImage: `url(${bg})` }}>
           <div
             className="profile-avatar"
-            style={{ backgroundImage: `url(${profileData.profile.avatar})` }}
+            style={{ backgroundImage: `url(${profile.avatar})` }}
           ></div>
         </div>
-
-        <div className="profile-username">{profileData.profile.username}</div>
-        <div className="profile-usertag">@{profileData.profile.username}</div>
-        <div className="profile-biography">
-          🚀 4X Gen-Z Strategist 📈 Working on the intersection of Fitness and
-          Plant Medicines 🤩 Locked eyes with Mike Tyson in Downtown LA once 🗣
-          Reddit/Billie Eilish/Silent Mediation 💪 Constructing purposeful
-          kindred spirits that drive people insane 📚 Currently reading - A
-          Beginner's Guide to Big Data 🔸 here is no saint without a past, no
-          sinner without a future. 🙏
+        <div
+          className={
+            'profile-edit' +
+            (user && user.usertag === profileString ? '' : ' unvisible')
+          }
+        >
+          <button onClick={() => history.push('/profile')}>Edit profile</button>
         </div>
-        <span className="profile-location"> 🌎 where</span>
-        <span className="profile-regdate"> 📅 02.12.132</span>
+        <div className="profile-text-wrapper">
+          <div className="profile-username">{profile.username}</div>
+          <div className="profile-usertag">@{profile.username}</div>
+          <div className="profile-biography">
+            {profile.biography ? (
+              profile.biography
+            ) : (
+              <span className="profile-placeholder">Who is this person?..</span>
+            )}
+          </div>
+          🌎
+          {profile.location ? (
+            <span className="profile-location">{profile.location}</span>
+          ) : (
+            <span className="profile-location profile-placeholder">
+              No location for now...
+            </span>
+          )}
+          <span className="profile-regdate">📅 {profile.registrationDate}</span>
+        </div>
       </div>
 
       <div className="profile-buttons">

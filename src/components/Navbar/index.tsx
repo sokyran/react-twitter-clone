@@ -3,8 +3,8 @@ import { DropdownMenu } from '../DropdownMenu'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
-import './navbar-styles.scss'
 import { setUser } from '../../redux/user/actions'
+import './navbar-styles.scss'
 
 export const Navbar = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ export const Navbar = () => {
       <button
         className="navbar-dropdown-item"
         onClick={() => {
-          history.push('/profile')
+          history.push(`/user/${user?.usertag}`)
         }}
       >
         Profile

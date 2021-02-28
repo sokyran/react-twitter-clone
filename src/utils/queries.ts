@@ -180,13 +180,12 @@ export const UPDATE_USER = gql`
 
 export const GET_PROFILE = gql`
   query getProfile($usertag: String!) {
-    profile(usertag: $usertag) {
+    getProfile(usertag: $usertag) {
       id
       avatar
       username
       usertag
       profile {
-        usertag
         registrationDate
         biography
         location
