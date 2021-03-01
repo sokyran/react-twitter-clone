@@ -15,13 +15,16 @@ interface FormProps {
   usertag: string
   username: string
   avatar: string
+  backgroundImage: string
+  biography: string
+  location: string
 }
 
 export const ProfileEdit = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const user = useSelector((state: RootState) => state.user)
-  const [updateUser, { error: graphError }] = useMutation(UPDATE_USER)
+  const [updateUser] = useMutation(UPDATE_USER)
 
   if (!user) {
     return <Redirect to="/login" />
@@ -35,17 +38,14 @@ export const ProfileEdit = () => {
       const updatedUser = {
         id: user.id,
         likedTweets: user.likedTweets,
+        registrationDate: user.registrationDate,
         ...values,
       }
       await updateUser({ variables: updatedUser })
       dispatch(setUser(updatedUser))
-      history.push('/')
+      history.push(`/user/${user.id}`)
     } catch (error) {
-      dispatch(
-        setError(
-          graphError?.graphQLErrors[0].extensions?.exception.response.message[0]
-        )
-      )
+      dispatch(setError(JSON.stringify(error)))
     }
   }
 
@@ -53,6 +53,9 @@ export const ProfileEdit = () => {
     usertag: user.usertag,
     username: user.username,
     avatar: user.avatar,
+    backgroundImage: user.backgroundImage || '',
+    biography: user.biography || '',
+    location: user.location || '',
   }
 
   const validate = (values: FormProps) => {
@@ -92,7 +95,7 @@ export const ProfileEdit = () => {
           <form className="profile-page" onSubmit={formik.handleSubmit}>
             <h1 className="profile-page-header">Your profile</h1>
             <ProfileTextInput id="usertag" name="usertag" label="Usertag" />
-            <ProfileTextInput id="username" name="username" label="Usertag" />
+            <ProfileTextInput id="username" name="username" label="Username" />
             <ProfileTextInput
               id="avatar"
               name="avatar"
@@ -103,6 +106,8 @@ export const ProfileEdit = () => {
               name="backgroundImage"
               label="Background Image"
             />
+            <ProfileTextInput id="location" name="location" label="Location" />
+
             <ProfileTextInput
               id="biography"
               name="biography"

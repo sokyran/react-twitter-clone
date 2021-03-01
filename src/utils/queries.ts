@@ -59,6 +59,7 @@ export const GET_TWEETS = gql`
       imageUrl
       commentCount
       user {
+        id
         username
         usertag
         avatar
@@ -76,6 +77,7 @@ export const GET_TWEET_BY_ID = gql`
       commentCount
       likes
       user {
+        id
         username
         usertag
         avatar
@@ -87,6 +89,7 @@ export const GET_TWEET_BY_ID = gql`
         likes
         inResponseTo
         user {
+          id
           username
           usertag
           avatar
@@ -97,21 +100,14 @@ export const GET_TWEET_BY_ID = gql`
 `
 
 export const GET_TWEETS_FOR_PROFILE = gql`
-  query tweetsByUser(
-    $usertag: String!
-    $withComments: Boolean
-    $loadLikes: Boolean
-  ) {
-    tweetsByUser(
-      usertag: $usertag
-      withComments: $withComments
-      loadLikes: $loadLikes
-    ) {
+  query tweetsByUser($id: Float!, $withComments: Boolean, $loadLikes: Boolean) {
+    tweetsByUser(id: $id, withComments: $withComments, loadLikes: $loadLikes) {
       id
       text
       date
       likes
       user {
+        id
         username
         usertag
         avatar
@@ -164,6 +160,9 @@ export const UPDATE_USER = gql`
     $usertag: String
     $username: String
     $avatar: String
+    $backgroundImage: String
+    $biography: String
+    $location: String
   ) {
     updateProfile(
       userUpdateInput: {
@@ -171,6 +170,9 @@ export const UPDATE_USER = gql`
         usertag: $usertag
         username: $username
         avatar: $avatar
+        location: $location
+        backgroundImage: $backgroundImage
+        biography: $biography
       }
     ) {
       id
@@ -179,8 +181,8 @@ export const UPDATE_USER = gql`
 `
 
 export const GET_PROFILE = gql`
-  query getProfile($usertag: String!) {
-    getProfile(usertag: $usertag) {
+  query getProfile($id: Float!) {
+    getProfile(id: $id) {
       id
       avatar
       username

@@ -24,14 +24,13 @@ export const BigTweet = ({ tweet }: Props) => {
       : false
 
   const { likes, likeTweet, unlikeTweet } = useLikeTweet(tweet.likes, tweet.id)
-
   return (
     <div className="tweet-details">
       <img
         src={tweet.user.avatar}
         alt=""
         className="tweet-details-avatar"
-        onClick={() => history.push(`/user/${tweet.user.usertag}`)}
+        onClick={() => history.push(`/user/${tweet.user.id}`)}
       ></img>
       <div className="tweet-details-user">
         <div className="tweet-details-user-username">{tweet.user.username}</div>

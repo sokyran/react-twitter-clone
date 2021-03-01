@@ -19,7 +19,11 @@ export interface IUser {
   usertag: string
   avatar: string
   likedTweets: number[]
+  registrationDate: string
   accessToken?: string
+  biography?: string
+  location?: string
+  backgroundImage?: string
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

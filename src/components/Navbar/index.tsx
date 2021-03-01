@@ -16,7 +16,7 @@ export const Navbar = () => {
       <button
         className="navbar-dropdown-item"
         onClick={() => {
-          history.push(`/user/${user?.usertag}`)
+          history.push(`/user/${user?.id}`)
         }}
       >
         Profile

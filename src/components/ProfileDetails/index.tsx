@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { RootState } from '../../redux'
 import { setError } from '../../redux/error/actions'
 import { GET_PROFILE, GET_TWEETS_FOR_PROFILE } from '../../utils/queries'
-import { ITweet } from '../../utils/types'
+import { ITweet, IUser } from '../../utils/types'
 import { MyLoader } from '../MyLoader'
 import { Tweet } from '../Tweet'
 import './profile-details-styles.scss'
@@ -15,7 +15,7 @@ interface ParamTypes {
 }
 
 interface IProfile {
-  id: string
+  id: number
   avatar: string
   usertag: string
   username: string
@@ -29,16 +29,20 @@ export const ProfileDetails = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { user } = useSelector((state: RootState) => state)
-  const [profile, setProfile] = useState<IProfile>()
+  const [profile, setProfile] = useState<IProfile | IUser>()
   const [isActive, setIsActive] = useState<
     'Tweets' | 'Tweets and replies' | 'Likes'
   >('Tweets')
 
   const { profile: profileString } = useParams<ParamTypes>()
+  const profileId = Number(profileString)
 
   useQuery(GET_PROFILE, {
     onCompleted: (data) => {
       const { avatar, id, username, usertag } = data.getProfile
+      if (user && user.id === profileId) {
+        return setProfile({ ...user })
+      }
       const profileStuff = { ...data.getProfile.profile }
       setProfile({
         avatar,
@@ -48,21 +52,21 @@ export const ProfileDetails = () => {
         ...profileStuff,
       })
     },
-    variables: { usertag: profileString },
+    variables: { id: profileId },
   })
 
   const { data: initData } = useQuery(GET_TWEETS_FOR_PROFILE, {
     onError: (err) => {
       dispatch(setError(err.message))
     },
-    variables: { usertag: profileString },
+    variables: { id: profileId },
     fetchPolicy: 'no-cache',
   })
 
   const [getTweetsAndReplies, { data: repliesData }] = useLazyQuery(
     GET_TWEETS_FOR_PROFILE,
     {
-      variables: { usertag: profileString, withComments: true },
+      variables: { id: profileId, withComments: true },
       fetchPolicy: 'no-cache',
     }
   )
@@ -70,7 +74,7 @@ export const ProfileDetails = () => {
   const [getLikedTweets, { data: likedData }] = useLazyQuery(
     GET_TWEETS_FOR_PROFILE,
     {
-      variables: { usertag: profileString, loadLikes: true },
+      variables: { id: profileId, loadLikes: true },
       fetchPolicy: 'no-cache',
     }
   )
@@ -100,7 +104,7 @@ export const ProfileDetails = () => {
     }
   }
 
-  const bg = 'https://bureau.ru/var/files/img1532613761'
+  const bgPlaceholder = 'https://bureau.ru/var/files/img1532613761'
   if (!profile) {
     return <MyLoader />
   }
@@ -108,7 +112,12 @@ export const ProfileDetails = () => {
   return (
     <div className="container">
       <div className="profile">
-        <div className="profile-bg" style={{ backgroundImage: `url(${bg})` }}>
+        <div
+          className="profile-bg"
+          style={{
+            backgroundImage: `url(${profile.backgroundImage || bgPlaceholder})`,
+          }}
+        >
           <div
             className="profile-avatar"
             style={{ backgroundImage: `url(${profile.avatar})` }}
@@ -116,15 +125,14 @@ export const ProfileDetails = () => {
         </div>
         <div
           className={
-            'profile-edit' +
-            (user && user.usertag === profileString ? '' : ' unvisible')
+            'profile-edit' + (user && user.id === profileId ? '' : ' unvisible')
           }
         >
           <button onClick={() => history.push('/profile')}>Edit profile</button>
         </div>
         <div className="profile-text-wrapper">
           <div className="profile-username">{profile.username}</div>
-          <div className="profile-usertag">@{profile.username}</div>
+          <div className="profile-usertag">@{profile.usertag}</div>
           <div className="profile-biography">
             {profile.biography ? (
               profile.biography
