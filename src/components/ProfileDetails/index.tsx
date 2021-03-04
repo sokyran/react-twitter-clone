@@ -140,7 +140,7 @@ export const ProfileDetails = () => {
               <span className="profile-placeholder">Who is this person?..</span>
             )}
           </div>
-          🌎
+          🌎{' '}
           {profile.location ? (
             <span className="profile-location">{profile.location}</span>
           ) : (

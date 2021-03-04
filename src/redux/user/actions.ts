@@ -10,7 +10,10 @@ export const initUser = (): AppThunk => {
         headers: { Authorization: `Bearer ${token}` },
       }
       try {
-        const res = await axios.get('http://192.168.0.104:3001/user', config)
+        const res = await axios.get(
+          process.env.REACT_APP_SERVER_ADDR + '/user',
+          config
+        )
         const { profile } = res.data
         delete res.data.profile
         dispatch({ type: SET_USER, payload: { ...res.data, ...profile } })

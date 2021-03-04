@@ -1,6 +1,5 @@
 import React from 'react'
 import { render } from 'react-dom'
-import './index.scss'
 import App from './App'
 import {
   ApolloClient,
@@ -11,9 +10,11 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import { store } from './redux'
 import { Provider } from 'react-redux'
+import './index.scss'
+require('dotenv').config()
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.0.104:3001/graphql',
+  uri: process.env.REACT_APP_SERVER_ADDR + '/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {
